@@ -1,5 +1,10 @@
 #include "Yarm.h"
 
-void Yarm::drawYarm()
+void Yarm::Update()
 {
+}
+
+void Yarm::draw()
+{
+	
 }
