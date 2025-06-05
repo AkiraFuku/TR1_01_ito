@@ -10,7 +10,25 @@ class Yarm
 {
 
 
+public:
+	struct Points
+	{
+	Vector3 position;
+	Vector3 prevPosition;
+	Vector3 velocity;
+	float mass;
 
+	bool isFixed ;
+	};
+	struct Constraint{
+		int i;//質点
+		int j;//質点
+		float d;//
+	};
+	
+	void Init(Vector3 startPos, Vector3 endPos, int numPoints, float k, float dt, float kDamping, Vector3 gravity);
+	void Update();
+	void draw();
 	
 private:
 	Vector3 starrtPos; // Start position of the path
@@ -18,22 +36,19 @@ private:
 	Vector3 endPos; // End position of the path
 	int numPoints; // Number of points in the path
 	float k;//バネの硬さ
+	float dt;//Delta time for simulation
 	float kDamping; // Damping coefficient
 	Vector3 gravity; // Gravity vector
-	std::vector<Vector3> points; // Points in the path
-	std::vector<Vector3> velocities; // Velocities at each point
-	std::vector<Vector3> PrevPoints; // Previous points for drawing
-	std::vector<float> m;//質量
+	std::vector<Points> points; // Points in the path
+	std::vector<Constraint> constraints; // Constraints between points
+	
 	
 
 
 
 
 
-public:
-	
-	void Update();
-	void draw();
+
 
 
 
