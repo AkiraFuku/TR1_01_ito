@@ -112,7 +112,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="Constraint.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MassFunction.cpp" />
-    <ClCompile Include="Yarm.cpp" />
+    <ClCompile Include="PBD.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\DirectXGame\3d\Camera.h" />
@@ -144,7 +144,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
     <ClInclude Include="Constraint.h" />
     <ClInclude Include="MassFunction.h" />
-    <ClInclude Include="Yarm.h" />
+    <ClInclude Include="PBD.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
