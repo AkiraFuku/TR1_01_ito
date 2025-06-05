@@ -4,6 +4,63 @@
 // 
 // 
 // 
+Vector3& operator+=(Vector3& lhv, const Vector3& rhv) {
+	lhv.x += rhv.x;
+	lhv.y += rhv.y;
+	lhv.z += rhv.z;
+	return lhv;
+}
+
+Vector3& operator-=(Vector3& lhv, const Vector3& rhv) {
+	lhv.x -= rhv.x;
+	lhv.y -= rhv.y;
+	lhv.z -= rhv.z;
+	return lhv;
+}
+
+Vector3& operator*=(Vector3& v, float s) {
+	v.x *= s;
+	v.y *= s;
+	v.z *= s;
+	return v;
+}
+
+Vector3& operator/=(Vector3& v, float s) {
+	v.x /= s;
+	v.y /= s;
+	v.z /= s;
+	return v;
+}
+Vector2& operator+(Vector2& lhv, const Vector2& rhv) {
+	lhv.x += rhv.x;
+	lhv.y += rhv.y;
+	return lhv;
+}
+Vector2& operator+=(Vector2& lhv, const Vector2& rhv) {
+	lhv.x += rhv.x;
+	lhv.y += rhv.y;
+	return lhv;
+}
+
+Vector2& operator-(Vector2& lhv, const Vector2& rhv) {
+	lhv.x -= rhv.x;
+	lhv.y -= rhv.y;
+	return lhv;
+}
+
+Vector2& operator*(Vector2& v, float s) {
+	v.x *= s;
+	v.y *= s;
+	return v;
+}
+
+Vector2& operator/(Vector2& v, float s) {
+	v.x /= s;
+	v.y /= s;
+	return v;
+}
+
+
 void MatrixScreenPrintf(int x, int y, const Matrix4x4& m, const char* label){
 	Novice::ScreenPrintf(x, y, "%s", label);
 	for (int i = 0; i < 4; i++){

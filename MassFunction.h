@@ -15,6 +15,20 @@ static const int kRowHeight = 20;
 
 void MatrixScreenPrintf(int x, int y,const Matrix4x4& m, const char* label);
 void VectorScreenPrintf( int x, int y,Vector3& vector, const char* label);
+
+// 代入演算子オーバーロード
+Vector3& operator+=(Vector3& lhs, const Vector3& rhv);
+Vector3& operator-=(Vector3& lhs, const Vector3& rhv);
+Vector3& operator*=(Vector3& v, float s);
+Vector3& operator/=(Vector3& v, float s);
+
+Vector2& operator+(Vector2& lhs, const Vector2& rhv);
+Vector2& operator+=(Vector2& lhs, const Vector2& rhv);
+Vector2& operator-(Vector2& lhs, const Vector2& rhv);
+Vector2& operator*(Vector2& v, float s);
+Vector2& operator/(Vector2& v, float s);
+
+
 ///
 ///透視投影行列
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farCrip);

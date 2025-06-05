@@ -14,14 +14,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = {0};
 	char preKeys[256] = {0};
 
-	Vector2 mousePosition = { 0.0f, 0.0f };
+	Vector2 mousePosition = {0.0f, 0.0f };
 
-	Vector2 StartPosition = { 0.0f, 0.0f };
-	Vector2 EndPosition = { 0.0f, 0.0f };
+	Vector2 StartPosition = { 500.0f, 100.0f };
+	Vector2 EndPosition = { 1050.0f, 100.0f };
 
-	PBD pbd;
+    PBD* pbd = new PBD;
 	// PBDの初期化
-	pbd.Initialize(, );
+	pbd->Initialize();
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
