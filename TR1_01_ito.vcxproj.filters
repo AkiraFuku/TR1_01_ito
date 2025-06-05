@@ -115,5 +115,6 @@
     <ClInclude Include="Yarm.h" />
     <ClInclude Include="MassFunction.h" />
     <ClInclude Include="Constraint.h" />
+    <ClInclude Include="MassPoint.h" />
   </ItemGroup>
 </Project>

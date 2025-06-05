@@ -144,6 +144,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
     <ClInclude Include="Constraint.h" />
     <ClInclude Include="MassFunction.h" />
+    <ClInclude Include="MassPoint.h" />
     <ClInclude Include="Yarm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

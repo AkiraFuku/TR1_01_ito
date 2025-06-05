@@ -12,6 +12,10 @@ using namespace KamataEngine;
 ///using namespace std;
 static const int kColumnWidth = 60;
 static const int kRowHeight = 20;
+Vector3& operator+=(Vector3& lhs, const Vector3& rhv);
+Vector3& operator-=(Vector3& lhs, const Vector3& rhv);
+Vector3& operator*=(Vector3& v, float s);
+Vector3& operator/=(Vector3& v, float s);
 
 void MatrixScreenPrintf(int x, int y,const Matrix4x4& m, const char* label);
 void VectorScreenPrintf( int x, int y,Vector3& vector, const char* label);

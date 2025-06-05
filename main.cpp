@@ -1,5 +1,8 @@
 #include <Novice.h>
 #include <KamataEngine.h>
+#include "MassFunction.h"
+#include"Yarm.h"
+#include "MassPoint.h"
 const char kWindowTitle[] = "学籍番号";
 using namespace KamataEngine;
 

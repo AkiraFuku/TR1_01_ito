@@ -2,6 +2,9 @@
 #include <KamataEngine.h>
 #include <Novice.h>
 #include<vector>
+#include"MassPoint.h"
+#include "Constraint.h"
+#include "MassFunction.h"
 using namespace KamataEngine;
 
 
@@ -13,17 +16,18 @@ class Yarm
 
 	
 private:
-	Vector3 starrtPos; // Start position of the path
+	Vector3 starrtPos_; // Start position of the path
 
-	Vector3 endPos; // End position of the path
-	int numPoints; // Number of points in the path
-	float k;//バネの硬さ
-	float kDamping; // Damping coefficient
-	Vector3 gravity; // Gravity vector
-	std::vector<Vector3> points; // Points in the path
-	std::vector<Vector3> velocities; // Velocities at each point
-	std::vector<Vector3> PrevPoints; // Previous points for drawing
-	std::vector<float> m;//質量
+	Vector3 endPos_; // End position of the path
+	int numPoints_; // Number of points in the path
+	float k_;//バネの硬さ
+	float kDamping_; // Damping coefficient
+	Vector3 gravity_; // Gravity vector
+	std::vector<MassPoint> points_; // Points in the path
+	std::vector<Vector3> velocities_; // Velocities at each point
+	std::vector<Constraint> constraints_; // Constraints between points
+
+	std::vector<float> m_;//質量
 	
 
 
@@ -35,7 +39,7 @@ public:
 	void Update();
 	void draw();
 
-
+	
 
 
 };
