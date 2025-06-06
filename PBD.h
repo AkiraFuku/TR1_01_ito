@@ -32,6 +32,7 @@ public:
 	void SetEndPos(Vector2 endPos) {
 		endPos_ = endPos;
 	} // Set the end position of the path
+	void VelocityDamping();
 	
 private:
 	Vector2 startPos_; // Start position of the path

@@ -25,10 +25,24 @@ Vector3& operator*=(Vector3& v, float s) {
 	return v;
 }
 
+Vector3& operator*(Vector3& v, float s)
+{
+	v.x *= s;
+	v.y *= s;
+	v.z *= s;
+	return v;
+}
+
 Vector3& operator/=(Vector3& v, float s) {
 	v.x /= s;
 	v.y /= s;
 	v.z /= s;
+	return v;
+}
+Vector2& operator/=(Vector2& v, float s)
+{
+	v.x /= s;
+	v.y /= s;
 	return v;
 }
 Vector2& operator+(Vector2& lhv, const Vector2& rhv) {
@@ -127,6 +141,7 @@ void MatrixScreenPrintf(int x, int y, const Matrix4x4& m, const char* label){
 		);
 	}
 
+	
 	Matrix4x4 MakeAfineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& traslate){
 		Matrix4x4 scaleMatrix=MakeScaleMatrix(scale);
 		//MatrixScreenPrintf(0, kRowHeight, scaleMatrix, "scaleMatrix");
@@ -473,6 +488,14 @@ Matrix4x4 MakeRotateZMatrix(float radian)
 		};
 		return result;
 	}
+	Vector2 Multiply(float scalar, const Vector2& v)
+	{
+		Vector2 result = {
+			scalar * v.x,
+			scalar * v.y
+		};
+		return result;
+	}
 	//
 	float Dot(const Vector3& v1, const Vector3& v2){
 		
@@ -482,6 +505,14 @@ Matrix4x4 MakeRotateZMatrix(float radian)
 	//
 	float Length(const Vector3& v){
 		float length = v.x * v.x + v.y * v.y + v.z * v.z;
+		if (length > 0.0f) {
+			return sqrtf(length);
+		}
+		return length;
+	}
+	float Length(const Vector2& v)
+	{
+		float length = v.x * v.x + v.y * v.y ;
 		if (length > 0.0f) {
 			return sqrtf(length);
 		}
@@ -501,4 +532,18 @@ Matrix4x4 MakeRotateZMatrix(float radian)
 		Vector3 result = { 0.0f, 0.0f, 0.0f };
 		return result;
 //
+	}
+
+	Vector2 Normalize(const Vector2& v)
+	{
+		float length = Length(v);
+		if (length > 0.0f) {
+			Vector2 result = {
+				v.x / length,
+				v.y / length,
+			};
+			return result;
+		}
+		Vector2 result = { 0.0f, 0.0f };
+		return result;
 	}

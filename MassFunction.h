@@ -8,6 +8,12 @@
 
 
 #include <assert.h>
+
+struct Matrix3x3
+{
+	float m[3][3];
+
+};
 using namespace KamataEngine;
 ///using namespace std;
 static const int kColumnWidth = 60;
@@ -20,7 +26,9 @@ void VectorScreenPrintf( int x, int y,Vector3& vector, const char* label);
 Vector3& operator+=(Vector3& lhs, const Vector3& rhv);
 Vector3& operator-=(Vector3& lhs, const Vector3& rhv);
 Vector3& operator*=(Vector3& v, float s);
+Vector3& operator*(Vector3& v, float s);
 Vector3& operator/=(Vector3& v, float s);
+Vector2& operator/=(Vector2& v, float s);
 
 Vector2& operator+(Vector2& lhs, const Vector2& rhv);
 Vector2& operator+=(Vector2& lhs, const Vector2& rhv);
@@ -39,7 +47,7 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height,fl
 
 
 ///クロス積(外積)
-Vector3 Cross(const Vector3& v1, const Vector3& v2);
+Vector3 Cross(const Vector3& v1, const Vector3& v2)
 //
 
 //
@@ -97,14 +105,6 @@ Matrix4x4 MakeRotateZMatrix( float radian);
 	/// <returns></returns>
 	Matrix4x4 Makeidetity4x4();
 //}
-	
-	/// <summary>
-	/// ベクトルの値の描画
-	/// </summary>
-	/// <param name="x">描画位置ｘ</param>
-	/// <param name="y">描画位置ｙ</param>
-	/// <param name="vector">ベクトル</param>
-	/// <param name="label">関数名</param>
 
 	/// <summary>
 	/// ADD 
@@ -127,6 +127,7 @@ Matrix4x4 MakeRotateZMatrix( float radian);
 	/// <param name="v">ベクトル</param>
 	/// <returns>ベクトル＊スカラー</returns>
 	Vector3 Multiply(float scalar,const Vector3& v);
+	Vector2 Multiply(float scalar,const Vector2& v);
 	/// <summary>
 	/// DOT
 	/// </summary>
@@ -140,9 +141,11 @@ Matrix4x4 MakeRotateZMatrix( float radian);
 	/// <param name="v">ベクトル</param>
 	/// <returns></returns>
 	float Length(const Vector3& v);
+	float Length(const Vector2& v);
 	/// <summary>
 	/// Normalize
 	/// </summary>
 	/// <param name="v">ベクトル</param>
 	/// <returns>正規化数</returns>
 	Vector3 Normalize(const Vector3& v);
+	Vector2 Normalize(const Vector2& v);
