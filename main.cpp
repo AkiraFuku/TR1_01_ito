@@ -16,12 +16,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Vector2 mousePosition = {0.0f, 0.0f };
 
-	Vector2 StartPosition = { 500.0f, 100.0f };
-	Vector2 EndPosition = { 1050.0f, 100.0f };
+	Vector2 startPosition = {800.0f, 700.0f };
+	Vector2 endPosition = { 1200.0f, 700.0f };
 
     PBD* pbd = new PBD;
+	int pointCount = 5;// 点の数
+	float k = 0.01f; // バネの定数
+	float dt = 0.01f; // デルタタイム
+	Vector2 gravity = { 0.0f, 0.0f }; // 重力ベクトル
+	float kDamping = 0.03f; // 減衰率
+	
+
+
 	// PBDの初期化
-	pbd->Initialize();
+	pbd->Initialize(startPosition,endPosition,pointCount ,k,dt,kDamping,gravity);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -36,6 +44,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+		// マウスの位置を取得
+		//Novice::GetMousePosition(mousePosition.x, mousePosition.y);
+
+		pbd->Update();
+
 		///
 		/// ↑更新処理ここまで
 		///
@@ -43,6 +56,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
+		pbd->Draw();
 
 		///
 		/// ↑描画処理ここまで

@@ -4,15 +4,17 @@
  #include <Novice.h>
 #define _USE_MATH_DEFINES
 #define PI 3.14159265358979323846f
+#include<iostream>
 #include <cmath>
-
-
 #include <assert.h>
 
 struct Matrix3x3
 {
 	float m[3][3];
 
+};
+struct Matrix2x2{
+	float m[2][2];
 };
 using namespace KamataEngine;
 ///using namespace std;
@@ -33,6 +35,7 @@ Vector2& operator/=(Vector2& v, float s);
 Vector2& operator+(Vector2& lhs, const Vector2& rhv);
 Vector2& operator+=(Vector2& lhs, const Vector2& rhv);
 Vector2& operator-(Vector2& lhs, const Vector2& rhv);
+Vector2& operator-=(Vector2& lhs, const Vector2& rhv);
 Vector2& operator*(Vector2& v, float s);
 Vector2& operator/(Vector2& v, float s);
 
@@ -47,7 +50,8 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height,fl
 
 
 ///クロス積(外積)
-Vector3 Cross(const Vector3& v1, const Vector3& v2)
+Vector3 Cross(const Vector3& v1, const Vector3& v2);
+Vector2 Cross(const Vector2& v1, const Vector2& v2);
 //
 
 //
@@ -65,6 +69,7 @@ Vector3  Transform(const Vector3& vector, const Matrix4x4& matrix);
 Matrix4x4 MakeRotateXMatrix( float radian);
 Matrix4x4 MakeRotateYMatrix( float radian);
 Matrix4x4 MakeRotateZMatrix( float radian);
+
 
 
 
@@ -149,3 +154,5 @@ Matrix4x4 MakeRotateZMatrix( float radian);
 	/// <returns>正規化数</returns>
 	Vector3 Normalize(const Vector3& v);
 	Vector2 Normalize(const Vector2& v);
+
+	Vector2 Lerp(const Vector2& v1, const Vector2& v2, float t);

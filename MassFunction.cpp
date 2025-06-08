@@ -62,6 +62,13 @@ Vector2& operator-(Vector2& lhv, const Vector2& rhv) {
 	return lhv;
 }
 
+Vector2& operator-=(Vector2& lhs, const Vector2& rhv)
+{
+	lhs.x -= rhv.x;
+	lhs.y -= rhv.y;
+	return lhs;
+}
+
 Vector2& operator*(Vector2& v, float s) {
 	v.x *= s;
 	v.y *= s;
@@ -73,6 +80,8 @@ Vector2& operator/(Vector2& v, float s) {
 	v.y /= s;
 	return v;
 }
+
+
 
 
 void MatrixScreenPrintf(int x, int y, const Matrix4x4& m, const char* label){
@@ -137,6 +146,12 @@ void MatrixScreenPrintf(int x, int y, const Matrix4x4& m, const char* label){
 		return Vector3(
 			v1.y*v2.z-v1.z*v2.y,
 			v1.z * v2.x - v1.x * v2.z,
+			v1.x * v2.y - v1.y * v2.x
+		);
+	}
+
+	Vector2 Cross(const Vector2& v1, const Vector2& v2)
+	{	return Vector2(
 			v1.x * v2.y - v1.y * v2.x
 		);
 	}
@@ -545,5 +560,14 @@ Matrix4x4 MakeRotateZMatrix(float radian)
 			return result;
 		}
 		Vector2 result = { 0.0f, 0.0f };
+		return result;
+	}
+
+	Vector2 Lerp(const Vector2& v1, const Vector2& v2, float t)
+	{
+		Vector2 result = {
+			std::lerp(v1.x, v2.x, t),
+			std::lerp(v1.y, v2.y, t)
+		};
 		return result;
 	}
