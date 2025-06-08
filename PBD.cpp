@@ -46,7 +46,7 @@ void PBD::Initialize(Vector2 startPos, Vector2 endPos, int numPoints, float k, f
 void PBD::Update()
 {
 	//外力による加速度を計算
-	/*for (int i = 0; i < numPoints_; i++)
+	for (int i = 0; i < numPoints_; i++)
 	{
 		points_[i].velocity += gravity_ * dt_;
 		if (points_[i].isFixed)
@@ -54,16 +54,16 @@ void PBD::Update()
 			points_[i].velocity = Vector2(0.0f, 0.0f);
 		}
 
-	}*/
+	}
 	//ベロシティ　ダンピング
-	//VelocityDamping();
+	VelocityDamping();
 
 	// 位置の更新
-	/*for (int i = 0; i < numPoints_; i++)
+	for (int i = 0; i < numPoints_; i++)
 	{
 		points_[i].pPosition = points_[i].position + points_[i].velocity * dt_;
 		points_[i].position = points_[i].pPosition;
-	}*/
+	}
 	
 	points_[0].position = startPos_;
 	// 最後の点をendPosに固定
@@ -75,22 +75,22 @@ void PBD::Update()
 	}
 
 	//速度の更新
-	//for (int i = 0; i < constraints_.size(); i++)
-	//{
-	//	Constraint c= constraints_[i];
-	//	Points p1 = points_[c.i];
-	//	Points p2 = points_[c.j];
-	//	float w1 = 1.0f / p1.mass;// 質量の逆数を計算
-	//	float w2 = 1.0f / p2.mass;// 質量の逆数を計算
+	for (int i = 0; i < constraints_.size(); i++)
+	{
+		Constraint c= constraints_[i];
+		Points p1 = points_[c.i];
+		Points p2 = points_[c.j];
+		float w1 = 1.0f / p1.mass;// 質量の逆数を計算
+		float w2 = 1.0f / p2.mass;// 質量の逆数を計算
 
-	//	float diff = Length(p1.position - p2.position);
-	//	Vector2 dp1 =Multiply( (-k_ * w1 / (w1 + w2) * (diff - c.d) ),Normalize(p1.position - p2.position));
-	//	Vector2 dp2 = Multiply((k_ * w2 / (w1 + w2) * (diff - c.d)), Normalize(p1.position - p2.position));
+		float diff = Length(p1.position - p2.position);
+		Vector2 dp1 =Multiply( (-k_ * w1 / (w1 + w2) * (diff - c.d) ),Normalize(p1.position - p2.position));
+		Vector2 dp2 = Multiply((k_ * w2 / (w1 + w2) * (diff - c.d)), Normalize(p1.position - p2.position));
 
 
-	//	points_[c.i].velocity += dp1 / dt_;
-	//	points_[c.j].velocity += dp2 / dt_;
-	//}
+		points_[c.i].velocity += dp1 / dt_;
+		points_[c.j].velocity += dp2 / dt_;
+	}
 
 }
 
