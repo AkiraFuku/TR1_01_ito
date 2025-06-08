@@ -35,16 +35,16 @@ public:
 	void VelocityDamping();
 	
 private:
-	Vector2 startPos_; // Start position of the path
+	Vector2 startPos_; // パスの開始位置
 
-	Vector2 endPos_; // End position of the path
-	int numPoints_; // Number of points in the path
+	Vector2 endPos_; // パスの終了位置
+	int numPoints_; // パーティクルの数
 	float k_;//バネの硬さ
-	float dt_;//Delta time for simulation
-	float kDamping_; // Damping coefficient
+	float dt_;//デルタ時間
+	float kDamping_; // Damping係数
 	Vector2 gravity_; // Gravity vector
-	std::vector<Points> points_; // Points in the path
-	std::vector<Constraint> constraints_; // Constraints between points
+	std::vector<Points> points_; //パーティクルのリスト
+	std::vector<Constraint> constraints_; // 接続のリスト
 	
 	
 

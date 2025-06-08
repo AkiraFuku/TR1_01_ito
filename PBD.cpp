@@ -63,11 +63,11 @@ void PBD::Update()
 	points_[0].position = startPos_;
 	// 最後の点をendPosに固定
 	points_[numPoints_ - 1].position = endPos_;
-	for (int i = 0; i < numPoints_; i++) {
-	float t = static_cast<float>(i) / static_cast<float>((numPoints_ -	1));
+	//for (int i = 0; i < numPoints_; i++) {
+	//float t = static_cast<float>(i) / static_cast<float>((numPoints_ -	1));
 
-		points_[i].position = Lerp(startPos_, endPos_, t);
-	}
+		//points_[i].position = Lerp(startPos_, endPos_, t);
+	//}
 
 	//速度の更新
 	for (int i = 0; i < constraints_.size(); i++)
