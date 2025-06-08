@@ -4,18 +4,18 @@ void PBD::Initialize(Vector2 startPos, Vector2 endPos, int numPoints, float k, f
 {
 	points_.clear();
 	constraints_.clear();
-	startPos_ = startPos;
-	endPos_ = endPos;
-	numPoints_ = numPoints;
-	k_ = k;
-	dt_ = dt;
-	kDamping_ = kDamping;
-	gravity_ = gravity;
+	startPos_ = startPos;// 開始位置を設定
+	endPos_ = endPos;// 終了位置を設定
+	numPoints_ = numPoints;// 点の数を設定
+	k_ = k;// バネ定数を設定
+	dt_ = dt;// タイムステップを設定
+	kDamping_ = kDamping;// ダンピング係数を設定
+	gravity_ = gravity;// 重力を設定
 
 	if (numPoints_ < 2) return; // 2点未満は無効
 
-	points_.resize(numPoints_);
-	constraints_.resize(numPoints_ - 1);
+	points_.resize(numPoints_);// 点の数だけポイントを確保
+	constraints_.resize(numPoints_ - 1);// 制約の数は点の数 - 1
 
 	for (int i = 0; i < numPoints_; i++) {
 
@@ -23,18 +23,13 @@ void PBD::Initialize(Vector2 startPos, Vector2 endPos, int numPoints, float k, f
 
 		points_[i].isFixed = (i == 0 || i == numPoints_ - 1); // 最初と最後の点を固定
 
-		points_[i].position = Lerp(startPos_, endPos_, t);
+		points_[i].position = Lerp(startPos_, endPos_, t);// 初期位置を線形補間で設定
+
 		points_[i].pPosition = points_[i].position; // 初期位置を設定	
-		points_[i].velocity = Vector2(0.0f, 0.0f);
-		points_[i].mass = 1.0f;
+		points_[i].velocity = Vector2(0.0f, 0.0f);// 初期速度をゼロに設定
+		points_[i].mass = 1.0f;// 質量を1.0に設定
 	}
-	for (int i = 0; i < numPoints_; i++) {
-	float t = static_cast<float>(i) / static_cast<float>((numPoints_ -	1));
-		
-	// 初期位置を線形補間で設定
-	points_[0].position = startPos_;
-		points_[i].position = Lerp(startPos_, endPos_, t);
-	}
+	
 	for (int i = 0; i < numPoints_ - 1; i++) {
 		constraints_[i].i = i;
 		constraints_[i].j = i + 1;
