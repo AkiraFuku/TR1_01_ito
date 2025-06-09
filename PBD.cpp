@@ -61,7 +61,7 @@ void PBD::Update()
 	// 位置の更新
 	for (int i = 0; i < numPoints_; i++)
 	{
-		points_[i].pPosition = points_[i].position + (points_[i].velocity * dt_);
+		points_[i].pPosition =points_[i].position + (points_[i].velocity * dt_);
 		points_[i].position = points_[i].pPosition;
 	}
 	
@@ -100,21 +100,31 @@ void PBD::Update()
 	}
 }
 
-void PBD::Draw()
+void PBD::Draw(Matrix4x4& viewProjectionMatrix,Matrix4x4& viewportMatrix)
 {
-
-
+	
+	
+	
+    Vector3* v3Points = new Vector3[numPoints_];
+    
+	
 	for (int i = 0; i < points_.size() ; i++)
 	{
-		Novice::DrawEllipse(static_cast<int>(points_[i].position.x), static_cast<int>(points_[i].position.y), 5, 5, 0.0f, WHITE, kFillModeSolid);
-		Novice::ScreenPrintf(10, 10 + i * 20, "Point %d: (%.2f, %.2f)%d,velocity:(%.2f, %.2f) ", i, points_[i].position.x, points_[i].position.y,points_[i].isFixed, points_[i].velocity.x, points_[i].velocity.y);
+		
+	v3Points[i]={points_[i].position.x,points_[i].position.y,0.0f};
+	Vector3	nbc= Transform(*v3Points,viewProjectionMatrix);
+	Vector3 screenPoints=Transform (nbc,viewportMatrix);
+        Novice::DrawEllipse(static_cast<int>(screenPoints.x), static_cast<int>(screenPoints.y), 5, 5, 0.0f, WHITE, kFillModeSolid);
+		Novice::ScreenPrintf(10, 10 + i * 20, "Point %d: (%.2f, %.2f)%d,velocity:(%.2f, %.2f) ", i, screenPoints.x,screenPoints.y,points_[i].isFixed, points_[i].velocity.x, points_[i].velocity.y);
 	}
+
 	for (int i = 0; i < constraints_.size(); i++)
 	{
 
 		Constraint c = constraints_[i];
 		Points p1 = points_[c.i];
 		Points p2 = points_[c.j];
+		//Vector3 p1 ={p }
 		int x1 = static_cast<int>(p1.position.x);
 		int y1 = static_cast<int>(p1.position.y);
 		int x2 = static_cast<int>(p2.position.x);
@@ -162,15 +172,4 @@ void PBD::VelocityDamping()
 
 }
 
-void PBD::InitPoints()
-{
-	for (int i = 0; i < points_.size(); i++) {
-		float t = static_cast<float>(i) / static_cast<float>((points_.size() -	1));
-		points_[i].position = Lerp(startPos_, endPos_, t);
-		points_[i].pPosition = points_[i].position; // 初期位置を設定
 
-	}
-	/*points_[0].isFixed=true;
-	points_[1].isFixed=true;
-	points_[numPoints_-1].isFixed=true;*/
-}

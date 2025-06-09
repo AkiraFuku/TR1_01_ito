@@ -27,7 +27,7 @@ public:
 	
 	void Initialize(Vector2 startPos, Vector2 endPos, int numPoints, float k, float dt, float kDamping, Vector2 gravity);
 	void Update();
-	void Draw();
+	void Draw(Matrix4x4& worldViewProjectionMatrix,Matrix4x4& viewportMatrix);
 
 	void SetEndPos(Vector2 endPos) {
 		endPos_ = endPos;
@@ -36,7 +36,7 @@ public:
 		startPos_ = straPos;
 	} // Set the end position of the path
 	void VelocityDamping();
-	void InitPoints();
+	
 	void setK(float k) {
 		k_ = k;
 	} // Set the spring constant
