@@ -485,12 +485,30 @@ Matrix4x4 MakeRotateZMatrix(float radian)
 		};
 		return result;
 	}
+	Vector2 Add(const Vector2& v1, const Vector2& v2)
+	{
+		Vector2 result={
+			v1.x + v2.x,
+			v1.y + v2.y,
+			
+		};
+		return result;
+	}
 	//
 	Vector3 Subtract(const Vector3& v1, const Vector3& v2){
 		Vector3 result = {
 			v1.x - v2.x,
 			v1.y - v2.y,
 			v1.z - v2.z
+		};
+		return result;
+	}
+	Vector2 Subtract(const Vector2& v1, const Vector2& v2)
+	{
+		Vector2 result = {
+			v1.x - v2.x,
+			v1.y - v2.y
+			
 		};
 		return result;
 	}

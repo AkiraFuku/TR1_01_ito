@@ -1,5 +1,6 @@
 #include <Novice.h>
 #include <KamataEngine.h>
+#include <imgui.h>
 #include "PBD.h"
 const char kWindowTitle[] = "学籍番号";
 using namespace KamataEngine;
@@ -16,20 +17,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Vector2 mousePosition = {0.0f, 0.0f };
 
-	Vector2 startPosition = {800.0f, 700.0f };
-	Vector2 endPosition = { 1200.0f, 700.0f };
+	Vector2 startPosition = {100.0f, 350.0f };
+	Vector2 endPosition = { 500.0f, 350.0f };
 
     PBD* pbd = new PBD;
-	int pointCount = 5;// 点の数
-	float k = 0.01f; // バネの定数
-	float dt = 0.01f; // デルタタイム
-	Vector2 gravity = { 0.0f, 0.0f }; // 重力ベクトル
-	float kDamping = 0.03f; // 減衰率
+	int pointCount = 10;// 点の数
+	float k = 0.1f; // バネの定数
+	float dt = 0.1f; // デルタタイム
+	Vector2 gravity = { 0.0f, 9.8f }; // 重力ベクトル
+
+	float kDamping = 0.05f; // 減衰率
+	float m=1.0f;
 	
 
 
 	// PBDの初期化
 	pbd->Initialize(startPosition,endPosition,pointCount ,k,dt,kDamping,gravity);
+	//pbd->InitPoints();
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -45,14 +49,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		// マウスの位置を取得
-		//Novice::GetMousePosition(mousePosition.x, mousePosition.y);
+		
+	
+        // 修正: static_cast を削除し、適切な型変換を行うために一時変数を使用します。
+        int mouseX = static_cast<int>(mousePosition.x);
+        int mouseY = static_cast<int>(mousePosition.y);
+        Novice::GetMousePosition(&mouseX, &mouseY);
+        mousePosition.x = static_cast<float>(mouseX);
+        mousePosition.y = static_cast<float>(mouseY);
 
+		ImGui::Begin("PBD Control Panel");
+		ImGui::SliderFloat("Spring Constant (k)", &k, 0.0f, 1.0f, "%.3f");
+		ImGui::SliderFloat("Delta Time", &dt, 0.01f, 1.0f, "%.3f");
+		ImGui::SliderFloat("Mass", &m, 0.01f, 10.0f, "%.3f");
+		ImGui::SliderFloat("startY", &startPosition.y, 0.01f, 10.0f, "%.3f");
+		
+		
+		ImGui::End();
+		pbd->setK(k);
+		pbd->SetDt(dt);
+		pbd->SetMass(m);
+		pbd->SetStartPos(startPosition);
 		pbd->Update();
 
 		///
 		/// ↑更新処理ここまで
 		///
-
+		
 		///
 		/// ↓描画処理ここから
 		///

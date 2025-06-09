@@ -118,6 +118,7 @@ Matrix4x4 MakeRotateZMatrix( float radian);
 	/// <param name="v2">ベクトル２</param>
 	/// <returns>ベクトル１＋２</returns>
 	Vector3 Add(const Vector3& v1,const Vector3& v2);
+	Vector2 Add(const Vector2& v1,const Vector2& v2);
 	/// <summary>
 	/// Subtract
 	/// </summary>
@@ -125,6 +126,7 @@ Matrix4x4 MakeRotateZMatrix( float radian);
 	/// <param name="v2">ベクトル２</param>
 	/// <returns>ベクトル１－２</returns>
 	Vector3 Subtract(const Vector3& v1,const Vector3& v2);
+	Vector2 Subtract(const Vector2& v1,const Vector2& v2);
 	/// <summary>
 	/// スカラー倍
 	/// </summary>

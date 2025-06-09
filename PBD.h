@@ -32,7 +32,26 @@ public:
 	void SetEndPos(Vector2 endPos) {
 		endPos_ = endPos;
 	} // Set the end position of the path
+	void SetStartPos(Vector2 straPos) {
+		startPos_ = straPos;
+	} // Set the end position of the path
 	void VelocityDamping();
+	void InitPoints();
+	void setK(float k) {
+		k_ = k;
+	} // Set the spring constant
+	void SetDt(float dt){
+		dt_=dt;
+	}
+	void SetMass(float m){
+		for (int i = 0; i < points_.size(); i++)
+		{
+			points_[i].mass=m;
+
+		}
+	
+	
+	}
 	
 private:
 	Vector2 startPos_; // パスの開始位置
