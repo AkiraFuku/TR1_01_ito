@@ -57,6 +57,7 @@ Vector2& operator+=(Vector2& lhv, const Vector2& rhv) {
 }
 
 Vector2& operator-(Vector2& lhv, const Vector2& rhv) {
+
 	lhv.x -= rhv.x;
 	lhv.y -= rhv.y;
 	return lhv;
