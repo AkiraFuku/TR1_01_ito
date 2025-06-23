@@ -1,11 +1,11 @@
 #include "PBD.h"
 #include "MassFunction.h"
-void PBD::Initialize(Points startPos, Points endPos, int numPoints, float k, float dt, float kDamping, Vector2 gravity)
+void PBD::Initialize(Vector2 startPos, Vector2 endPos, int numPoints, float k, float dt, float kDamping, Vector2 gravity)
 {
 	points_.clear();
 	constraints_.clear();
-	startPos_ = startPos.position;// 開始位置を設定
-	endPos_ = endPos.position;// 終了位置を設定
+	startPos_ = startPos;// 開始位置を設定
+	endPos_ = endPos;// 終了位置を設定
 	numPoints_ = numPoints;// 点の数を設定
 	springStiffness_ = k;// バネ定数を設定
 	dt_ = dt;// タイムステップを設定
@@ -30,9 +30,9 @@ void PBD::Initialize(Points startPos, Points endPos, int numPoints, float k, flo
 		points_[i].mass = 1.0f;// 質量を1.0に設定
 
 	}
-	points_[0].isFixed = startPos.isFixed;
+	points_[0].isFixed = true;
 	//points_[1].isFixed = true;
-	points_[numPoints_ - 1].isFixed = startPos.isFixed;
+	points_[numPoints_ - 1].isFixed = true;
 
 	for (int i = 0; i < numPoints_ - 1; i++) {
 		constraints_[i].prevIndex = i;

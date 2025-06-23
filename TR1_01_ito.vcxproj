@@ -147,7 +147,6 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="MassFunction.h" />
     <ClInclude Include="NunoMesh.h" />
     <ClInclude Include="PBD.h" />
-    <ClInclude Include="PBDLinkConstraint.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
