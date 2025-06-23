@@ -37,8 +37,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	nuno ->Initialize();
 	Vector3 rotate = { 0.0f, 0.0f, 0.0f };
 	Vector3 traslate = { 0.0f, 0.0f, 0.0f };
-	Vector3 cameraTranslate = { 0.0f, 0.0f, 0.0f };
-	Vector3 cameraRotate = { 0.26f, 0.0f, 0.0f };
+	Vector3 cameraTranslate = { 0.0f, 2.0f, -8.0f };
+	Vector3 cameraRotate = { 0.0f, 0.0f, 0.0f };
 
 	// PBDの初期化
 	//pbd->Initialize(startPosition, endPosition, pointCount, k, dt, kDamping, gravity);

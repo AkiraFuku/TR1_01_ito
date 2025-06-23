@@ -13,7 +13,7 @@ void NunoMesh::Initialize() {
         for (int x = 0; x <= kSubdivision_; ++x) {
             float px = -kGridHalfWidth + kGridEvery * x;
             float py = 0.0f; // 高さ
-            float pz = -kGridHalfWidth + kGridEvery * y;
+            float pz = -kGridHalfWidth - kGridEvery * y;
             meshPoints_[y][x] = Vector3{ px, py, pz };
         }
     }
