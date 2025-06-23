@@ -21,8 +21,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Vector2 mousePosition = { 0.0f, 0.0f };
 
-	Vector2 startPosition = { 100.0f, 350.0f };
-	Vector2 endPosition = { 500.0f, 350.0f };
+	PBD::Points startPosition = { {100.0f, 350.0f},{},{0.0f,0.0f},1.0f,true };
+	PBD::Points endPosition = { (500.0f, 350.0f),{},{0.0f,0.0f},1.0f,false };
 
 	PBD* pbd = new PBD;
 	int pointCount = 10;// 点の数
@@ -69,16 +69,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::SliderFloat("Spring Constant (k)", &k, 0.0f, 1.0f, "%.3f");
 //		ImGui::SliderFloat("Delta Time", &dt, 0.01f, 1.0f, "%.3f");
 		ImGui::SliderFloat("Mass", &m, 0.01f, 10.0f, "%.3f");
-		ImGui::SliderFloat2("startPos", &startPosition.x, 0.01f, 1280.0f, "%.3f");
-		ImGui::SliderFloat2("EndPos", &endPosition.x, 0.01f, 1280.0f, "%.3f");
+		ImGui::SliderFloat2("startPos", &startPosition.position.x, 0.01f, 1280.0f, "%.3f");
+		ImGui::SliderFloat2("EndPos", &endPosition.position.x, 0.01f, 1280.0f, "%.3f");
 
 
 		ImGui::End();
 		pbd->setK(k);
 		pbd->SetDt(dt);
 		pbd->SetMass(m);
-		pbd->SetStartPos(startPosition);
-		pbd->SetEndPos(endPosition);
+		pbd->SetStartPos(startPosition.position);
+		pbd->SetEndPos(endPosition.position);
 		pbd->Update();
 
 		//Matrix4x4 worldMatrix = MakeAfineMatrix({ 1.0f, 1.0f, 1.0f }, rotate, traslate);
