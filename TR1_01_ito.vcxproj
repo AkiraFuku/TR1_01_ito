@@ -109,8 +109,10 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
+    <ClCompile Include="DrawFunction.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MassFunction.cpp" />
+    <ClCompile Include="NunoMesh.cpp" />
     <ClCompile Include="PBD.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -141,7 +143,9 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="C:\KamataEngine\DirectXGame\input\Input.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\scene\GameScene.h" />
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
+    <ClInclude Include="DrawFunction.h" />
     <ClInclude Include="MassFunction.h" />
+    <ClInclude Include="NunoMesh.h" />
     <ClInclude Include="PBD.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

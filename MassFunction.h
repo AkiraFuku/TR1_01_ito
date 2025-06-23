@@ -16,6 +16,7 @@ struct Matrix3x3
 struct Matrix2x2{
 	float m[2][2];
 };
+
 using namespace KamataEngine;
 ///using namespace std;
 static const int kColumnWidth = 60;
@@ -23,6 +24,7 @@ static const int kRowHeight = 20;
 
 void MatrixScreenPrintf(int x, int y,const Matrix4x4& m, const char* label);
 void VectorScreenPrintf( int x, int y,Vector3& vector, const char* label);
+Vector3 Perpendicular(const Vector3& vector);
 
 // 代入演算子オーバーロード
 Vector3& operator+=(Vector3& lhs, const Vector3& rhv);

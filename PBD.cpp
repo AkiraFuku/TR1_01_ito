@@ -67,10 +67,10 @@ void PBD::Update()
 	}
 
 	points_[0].position = startPos_;
-	points_[0].isFixed = true;
+	//points_[0].isFixed = true;
 	// 最後の点をendPosに固定
 	points_[numPoints_ - 1].position = endPos_;
-	points_[numPoints_ - 1].isFixed = true;
+	//points_[numPoints_ - 1].isFixed = true;
 
 	//速度の更新
 	for (int i = 0; i < constraints_.size(); i++)
@@ -89,12 +89,7 @@ void PBD::Update()
 		points_[c.nextIndex].velocity += dp2 / dt_;
 
 	}
-	for (int i = 0; i < numPoints_; i++) {
-		if (points_[i].isFixed)
-		{
-			points_[i].velocity = Vector2(0.0f, 0.0f);
-		}
-	}
+	
 }
 
 void PBD::Draw()

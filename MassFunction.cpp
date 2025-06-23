@@ -4,6 +4,13 @@
 // 
 // 
 // 
+Vector3 Perpendicular(const Vector3& vector){
+	if (vector.x!=0.0f||vector.y!=0.0f){
+		return Vector3(-vector.y, vector.x, 0.0f);
+
+	}
+	return Vector3(0.0f, -vector.z, vector.y);
+}
 Vector3& operator+=(Vector3& lhv, const Vector3& rhv) {
 	lhv.x += rhv.x;
 	lhv.y += rhv.y;
