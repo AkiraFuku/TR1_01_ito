@@ -119,5 +119,6 @@
     <ClInclude Include="PBD.h" />
     <ClInclude Include="NunoMesh.h" />
     <ClInclude Include="DrawFunction.h" />
+    <ClInclude Include="PBDLinkConstraint.h" />
   </ItemGroup>
 </Project>

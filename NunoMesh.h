@@ -1,11 +1,13 @@
 #pragma once  
-#include "PBD.h"  
+//#include "PBD.h"  
 #include <vector>  
+#include <KamataEngine.h>
+//#include "PBDLinkConstraint.h"
 using namespace KamataEngine;  
 class NunoMesh  
 {  
 public:  
-	void Initialize(Vector3 StartPos,Vector3 GolePos);  
+	void Initialize();  
 	void Update();  
 	void Draw(  
 		const Matrix4x4& viewProjectionMatrix,  
@@ -13,10 +15,8 @@ public:
 	);  
 
 private:  
-	Vector3 StartPos_;
-	Vector3 GolePos_;
-
-	std::vector<std::vector<PBD::Points>> nestedP_; // Fixed the template argument issue  
-	std::vector<std::vector<PBD::Constraint>>Constraint;
-
+	
+	int kSubdivision_ = 1; // 分割数（1なら2x2=4点）
+	std::vector<std::vector<Vector3>> meshPoints_;
+	
 };
