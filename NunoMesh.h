@@ -16,7 +16,9 @@ public:
 
 private:  
 	
-	int kSubdivision_ = 1; // 分割数（1なら2x2=4点）
-	std::vector<std::vector<Vector3>> meshPoints_;
+	int kSubdivision_ = 1; // 分割数
+	std::vector<std::vector<PBD::Points>> meshPoints_; // 各頂点の物理情報
+	std::vector<PBD::Constraint> constraints_;         // 拘束リスト
+	PBD pbd_; // PBDの物理演算用インスタンス
 	
 };
