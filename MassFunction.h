@@ -160,3 +160,5 @@ Matrix4x4 MakeRotateZMatrix( float radian);
 	Vector2 Normalize(const Vector2& v);
 
 	Vector2 Lerp(const Vector2& v1, const Vector2& v2, float t);
+	Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t);
+	Vector3 Division(float scalar,const Vector3& v );

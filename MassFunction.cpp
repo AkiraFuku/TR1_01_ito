@@ -597,3 +597,24 @@ Matrix4x4 MakeRotateZMatrix(float radian)
 		};
 		return result;
 	}
+
+	Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t)
+	{
+		Vector3 result = {
+			std::lerp(v1.x, v2.x, t),
+			std::lerp(v1.y, v2.y, t),
+			std::lerp(v1.z, v2.z, t)
+		};
+		return result;
+	}
+
+	Vector3 Division(float scalar, const Vector3& v)
+	{
+		
+		Vector3 result = {
+			v.x / scalar,
+				v.y / scalar,
+				v.z / scalar
+			};
+			return result;
+	}

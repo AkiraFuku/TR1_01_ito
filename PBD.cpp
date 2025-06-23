@@ -1,15 +1,12 @@
 #include "PBD.h"
 #include "MassFunction.h"
-void PBD::Initialize(Points startPos, Points endPos, int numPoints, float k, float dt, float kDamping, Vector2 gravity)
+void PBD::Initialize(Vector3 startPos, Vector3 endPos, int numPoints,  Vector3 gravity)
 {
 	points_.clear();
 	constraints_.clear();
-	startPos_ = startPos.position;// 開始位置を設定
-	endPos_ = endPos.position;// 終了位置を設定
+	startPos_ = startPos;// 開始位置を設定
+	endPos_ = endPos;// 終了位置を設定
 	numPoints_ = numPoints;// 点の数を設定
-	springStiffness_ = k;// バネ定数を設定
-	dt_ = dt;// タイムステップを設定
-	kDamping_ = kDamping;// ダンピング係数を設定
 	gravity_ = gravity;// 重力を設定
 
 	if (numPoints_ < 2) return; // 2点未満は無効
@@ -26,13 +23,13 @@ void PBD::Initialize(Points startPos, Points endPos, int numPoints, float k, flo
 		points_[i].position = Lerp(startPos_, endPos_, t);// 初期位置を線形補間で設定
 
 		points_[i].estimationPosition = points_[i].position; // 初期位置を設定	
-		points_[i].velocity = Vector2(0.0f, 0.0f);// 初期速度をゼロに設定
+		points_[i].velocity = Vector3(0.0f, 0.0f,0.0f);// 初期速度をゼロに設定
 		points_[i].mass = 1.0f;// 質量を1.0に設定
 
 	}
-	points_[0].isFixed = startPos.isFixed;
+	points_[0].isFixed = true;
 	//points_[1].isFixed = true;
-	points_[numPoints_ - 1].isFixed = startPos.isFixed;
+	points_[numPoints_ - 1].isFixed =true;
 
 	for (int i = 0; i < numPoints_ - 1; i++) {
 		constraints_[i].prevIndex = i;
@@ -50,19 +47,19 @@ void PBD::Update()
 		points_[i].velocity += gravity_ * dt_;
 		if (points_[i].isFixed)
 		{
-			points_[i].velocity = Vector2(0.0f, 0.0f);
+			points_[i].velocity = Vector3(0.0f, 0.0f,0.0f);
 		}
 
 	}
 
 	//ベロシティ　ダンピング
-	//VelocityDamping();
+	
 
 	// 位置の更新
 	for (int i = 0; i < numPoints_; i++)
 	{
 
-		points_[i].estimationPosition = points_[i].position + (points_[i].velocity * dt_);
+		points_[i].estimationPosition =Add( points_[i].position , Multiply( dt_,points_[i].velocity ));
 		points_[i].position = points_[i].estimationPosition;
 	}
 
@@ -82,85 +79,61 @@ void PBD::Update()
 		float w2 = 1.0f / p2.mass;// 質量の逆数を計算
 
 		float diff = Length(Subtract(p1.position , p2.position));
-		Vector2 dp1 = Multiply((-springStiffness_ * w1 / (w1 + w2) * (diff - c.distance)), Normalize(Subtract(p1.position , p2.position)));
-		Vector2 dp2 = Multiply((springStiffness_ * w2 / (w1 + w2) * (diff - c.distance)), Normalize(Subtract(p1.position , p2.position)));
+		Vector3 dp1 = Multiply((-springStiffness_ * w1 / (w1 + w2) * (diff - c.distance)), Normalize(Subtract(p1.position , p2.position)));
+		Vector3 dp2 = Multiply((springStiffness_ * w2 / (w1 + w2) * (diff - c.distance)), Normalize(Subtract(p1.position , p2.position)));
 
-		points_[c.prevIndex].velocity += dp1 / dt_;
-		points_[c.nextIndex].velocity += dp2 / dt_;
+		points_[c.prevIndex].velocity += Division(dt_,dp1);
+		points_[c.nextIndex].velocity += Division (dt_,dp2);
 
 	}
 	
 }
 
-void PBD::Draw()
+void PBD::Draw(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix)
 {
+    for (int i = 0; i < points_.size(); i++)
+    {
+        // 3D→2D変換
+        Vector3 pos3d = points_[i].position;
+        Vector3 projected = Transform(pos3d, viewProjectionMatrix);
+        Vector3 screen = Transform(projected, viewportMatrix);
 
+        Novice::DrawEllipse(
+            static_cast<int>(screen.x),
+            static_cast<int>(screen.y),
+            5, 5, 0.0f, WHITE, kFillModeSolid
+        );
+        Novice::ScreenPrintf(
+            10, 10 + i * 20,
+            "Point %d: (%.02f, %.02f, %.02f) %d, velocity:(%.02f, %.02f, %.02f)",
+            i, pos3d.x, pos3d.y, pos3d.z, points_[i].isFixed,
+            points_[i].velocity.x, points_[i].velocity.y, points_[i].velocity.z
+        );
+    }
 
+    for (int i = 0; i < constraints_.size(); i++)
+    {
+        Constraint c = constraints_[i];
+        Points p1 = points_[c.prevIndex];
+        Points p2 = points_[c.nextIndex];
 
+        Vector3 p1_screen = Transform(Transform(p1.position, viewProjectionMatrix), viewportMatrix);
+        Vector3 p2_screen = Transform(Transform(p2.position, viewProjectionMatrix), viewportMatrix);
 
-	for (int i = 0; i < points_.size(); i++)
-	{
+        Novice::DrawLine(
+            static_cast<int>(p1_screen.x), static_cast<int>(p1_screen.y),
+            static_cast<int>(p2_screen.x), static_cast<int>(p2_screen.y),
+            WHITE
+        );
+    }
 
+    // 始点・終点も同様に変換して描画
+    Vector3 start_screen = Transform(Transform(startPos_, viewProjectionMatrix), viewportMatrix);
+    Vector3 end_screen = Transform(Transform(endPos_, viewProjectionMatrix), viewportMatrix);
 
-		Vector2 screen{ points_[i].position.x,(points_[i].position.y - 500) * -1.0f };
-
-
-		Novice::DrawEllipse(static_cast<int>(screen.x), static_cast<int>(screen.y), 5, 5, 0.0f, WHITE, kFillModeSolid);
-		Novice::ScreenPrintf(10, 10 + i * 20, "Point %d: (%.02f, %.02f)%d,velocity:(%.02f, %.02f) ", i, points_[i].position.x, points_[i].position.y, points_[i].isFixed, points_[i].velocity.x, points_[i].velocity.y);
-	}
-
-	for (int i = 0; i < constraints_.size(); i++)
-	{
-
-		Constraint c = constraints_[i];
-		Points p1 = points_[c.prevIndex];
-		Points p2 = points_[c.nextIndex];
-
-		int x1 = static_cast<int>(p1.position.x);
-		int y1 = static_cast<int>((p1.position.y - 500) * -1.0f);
-		int x2 = static_cast<int>(p2.position.x);
-		int y2 = static_cast<int>((p2.position.y - 500) * -1.0f);
-		Novice::DrawLine(x1, y1, x2, y2, WHITE);
-	}
-
-	Novice::DrawEllipse(static_cast<int>(startPos_.x), static_cast<int>((startPos_.y - 500) * -1.0f), 5, 5, 0.0f, RED, kFillModeSolid);
-	Novice::DrawEllipse(static_cast<int>(endPos_.x), static_cast<int>((endPos_.y - 500) * -1.0f), 5, 5, 0.0f, BLACK, kFillModeSolid);
-
+    Novice::DrawEllipse(static_cast<int>(start_screen.x), static_cast<int>(start_screen.y), 5, 5, 0.0f, RED, kFillModeSolid);
+    Novice::DrawEllipse(static_cast<int>(end_screen.x), static_cast<int>(end_screen.y), 5, 5, 0.0f, BLACK, kFillModeSolid);
 }
 
-void PBD::VelocityDamping()
-{
-	Vector2 xcm = Vector2(0.0f, 0.0f);
-	Vector2 vcm = Vector2(0.0f, 0.0f);
-	float totalMass = 0.0f;
-	for (int i = 0; i < numPoints_; i++)
-	{
-		xcm += points_[i].position;
-		vcm += points_[i].velocity;
-		totalMass += points_[i].mass;
-	}
-	xcm /= totalMass;
-	vcm /= totalMass;
-	Vector2 l = Vector2(0.0f, 0.0f);
-	float i = 0.0f;
-	std::vector<Vector2> rs(numPoints_);
-	for (int j = 0; j < numPoints_; j++)
-	{
-		Vector2 r = points_[j].position - xcm;
-		rs[j] = r;
-
-		l += Cross(r, Multiply(points_[j].mass, points_[j].velocity));
-		i += Length(r) * points_[j].mass;
-	}
-	Vector2 omega = Multiply(1.0f / i, l);
-	for (int j = 0; j < numPoints_; j++)
-	{
-		Vector2 deltaV = vcm + Cross(omega, rs[j]) - points_[j].velocity;
-		points_[j].velocity += deltaV * kDamping_;
-	}
-
-
-
-}
 
 

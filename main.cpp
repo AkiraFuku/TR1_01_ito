@@ -22,26 +22,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Vector2 mousePosition = { 0.0f, 0.0f };
 
-	//PBD::Points startPosition = {{ 100.0f, 350.0f},true };
+	Vector3 startPosition = { 100.0f, 350.0f,0.0f };
+	Vector3 endPosition = { 500.0f, 350.0f,0.0f };
 	//PBD::Points endPosition = {{ 500.0f, 350.0f},true };
 
-//	PBD* pbd = new PBD;
-	//int pointCount = 10;// 点の数
-	//float k = 0.1f; // バネの定数
-	//const float dt = 1.f / 60.f; // デルタタイム
-	//Vector2 gravity = { 0.0f, -9.8f }; // 重力ベクトル
+	PBD* pbd = new PBD;
+	int pointCount = 10;// 点の数
+	
+	Vector3 gravity = { 0.0f, -9.8f,0.0f }; // 重力ベクトル
 
-	//float kDamping = 0.05f; // 減衰率
-	//float m = 1.0f;
+	
+	float m = 1.0f;
 	NunoMesh* nuno=new NunoMesh;
 	nuno ->Initialize();
 	Vector3 rotate = { 0.0f, 0.0f, 0.0f };
 	Vector3 traslate = { 0.0f, 0.0f, 0.0f };
-	Vector3 cameraTranslate = { 0.0f, 0.0f, 0.0f };
-	Vector3 cameraRotate = { 0.26f, 0.0f, 0.0f };
+	Vector3 cameraTranslate = { 0.0f, 0.0f, 20.0f }; // Z+方向に引く
+	Vector3 cameraRotate = { 0.0f, 0.0f, 0.0f };     // 正面を向く
 
 	// PBDの初期化
-	//pbd->Initialize(startPosition, endPosition, pointCount, k, dt, kDamping, gravity);
+	pbd->Initialize(startPosition, endPosition, pointCount, gravity);
 	//pbd->InitPoints();
 
 	// ウィンドウの×ボタンが押されるまでループ
@@ -67,8 +67,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		mousePosition.x = static_cast<float>(mouseX);
 		mousePosition.y = static_cast<float>(mouseY);
 
-		if (keys[DIK_W] != 0) cameraTranslate.z += 0.1f; // 前進
-		if (keys[DIK_S] != 0) cameraTranslate.z -= 0.1f; // 後退	
+		if (keys[DIK_W] != 0) cameraTranslate.y += 0.1f; // 前進
+		if (keys[DIK_S] != 0) cameraTranslate.y -= 0.1f; // 後退	
 		if (keys[DIK_A] != 0) cameraTranslate.x -= 0.1f; // 左移動
 		if (keys[DIK_D] != 0) cameraTranslate.x += 0.1f; // 右移動
 		if (keys[DIK_UP] != 0) cameraRotate.x += 0.1f; // 前進
@@ -76,20 +76,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (keys[DIK_LEFT] != 0) cameraRotate.y -= 0.1f; // 左移動
 		if (keys[DIK_RIGHT] != 0) cameraRotate.y += 0.1f; // 右移動
 		ImGui::Begin("PBD Control Panel");
-		//ImGui::SliderFloat("Spring Constant (k)", &k, 0.0f, 1.0f, "%.3f");
-//		ImGui::SliderFloat("Delta Time", &dt, 0.01f, 1.0f, "%.3f");
-		//ImGui::SliderFloat("Mass", &m, 0.01f, 10.0f, "%.3f");
-		//ImGui::SliderFloat2("startPos", &startPosition.position.x, 0.01f, 1280.0f, "%.3f");
-		//ImGui::SliderFloat2("EndPos", &endPosition.position.x, 0.01f, 1280.0f, "%.3f");
+		
+		ImGui::SliderFloat("Mass", &m, 0.01f, 10.0f, "%.3f");
+		ImGui::SliderFloat3("startPos", &startPosition.x, 0.01f, 1280.0f, "%.3f");
+		ImGui::SliderFloat3("EndPos", &endPosition.x, 0.01f, 1280.0f, "%.3f");
 
 		nuno->Update();
 		ImGui::End();
-		//pbd->setK(k);
-		//pbd->SetDt(dt);
-		//pbd->SetMass(m);
-		//pbd->SetStartPos(startPosition.position);
-		//pbd->SetEndPos(endPosition.position);
-		//pbd->Update();
+		
+		pbd->SetStartPos(startPosition);
+		pbd->SetEndPos(endPosition);
+		pbd->Update();
 		;
 
 
@@ -112,7 +109,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-		//pbd->Draw();
+		pbd->Draw(viewProjectionMatrix,viewportMatrix);
 		nuno->Draw(viewProjectionMatrix,viewportMatrix);
 
 		///
