@@ -21,13 +21,19 @@ public:
 		float mass;// 質点の質量
 		bool isFixed ;
 	};
+	struct Point
+	{
+		//　質点の位置
+		Vector2 position;
+		bool isFixed ;
+	};
 	struct Constraint{
 		int prevIndex;//ひとつ前の質点
 		int nextIndex;//ひとつ次の質点
 		float distance;//
 	};
 	
-    void Initialize(Points startPos, Points endPos, int numPoints, float k, float dt, float kDamping, Vector2 gravity);
+    void Initialize(Point startPos, Point endPos, int numPoints );
 	void Update();
 	void Draw();
 
@@ -37,14 +43,9 @@ public:
 	void SetStartPos(Vector2 straPos) {
 		startPos_ = straPos;
 	} // Set the end position of the path
-	void VelocityDamping();
 	
-	void setK(float springStiffness) {
-		springStiffness_ = springStiffness;
-	} // Set the spring constant
-	void SetDt(float dt){
-		dt_=dt;
-	}
+	
+	
 	void SetMass(float mass){
 		for (int i = 0; i < points_.size(); i++)
 		{
@@ -54,16 +55,19 @@ public:
 	
 	
 	}
+
+    // 座標と点数だけでPBDを初期化する簡易関数
+    
 	
 private:
 	Vector2 startPos_; // パスの開始位置
 
 	Vector2 endPos_; // パスの終了位置
 	int numPoints_; // パーティクルの数
-	float springStiffness_;//バネの硬さ
-	float dt_;//デルタ時間
-	float kDamping_; // Damping係数
-	Vector2 gravity_; // Gravity vector
+	const float springStiffness_= 0.1f; ;//バネの硬さ
+	const float dt_=1.0f / 60.f;;//デルタ時間
+	
+	Vector2 gravity_={ 0.0f, -9.8f }; // Gravity vector
 	std::vector<Points> points_; //パーティクルのリスト
 	std::vector<Constraint> constraints_; // 接続のリスト
 	

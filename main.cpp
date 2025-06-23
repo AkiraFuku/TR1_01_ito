@@ -28,7 +28,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 //	PBD* pbd = new PBD;
 	//int pointCount = 10;// 点の数
 	//float k = 0.1f; // バネの定数
-	//const float dt = 1.f / 60.f; // デルタタイム
+	//const float dt = 1.0f / 60.f; // デルタタイム
 	//Vector2 gravity = { 0.0f, -9.8f }; // 重力ベクトル
 
 	//float kDamping = 0.05f; // 減衰率
@@ -37,8 +37,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	nuno ->Initialize();
 	Vector3 rotate = { 0.0f, 0.0f, 0.0f };
 	Vector3 traslate = { 0.0f, 0.0f, 0.0f };
-	Vector3 cameraTranslate = { 0.0f, 0.0f, 0.0f };
-	Vector3 cameraRotate = { 0.26f, 0.0f, 0.0f };
+	Vector3 cameraTranslate = { 0.0f, 5.0f, -20.0f };
+	Vector3 cameraRotate = { 0.5f, 0.0f, 0.0f };
 
 	// PBDの初期化
 	//pbd->Initialize(startPosition, endPosition, pointCount, k, dt, kDamping, gravity);
@@ -67,8 +67,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		mousePosition.x = static_cast<float>(mouseX);
 		mousePosition.y = static_cast<float>(mouseY);
 
-		if (keys[DIK_W] != 0) cameraTranslate.z += 0.1f; // 前進
-		if (keys[DIK_S] != 0) cameraTranslate.z -= 0.1f; // 後退	
+		if (keys[DIK_W] != 0) cameraTranslate.y += 0.1f; // 前進
+		if (keys[DIK_S] != 0) cameraTranslate.y -= 0.1f; // 後退	
 		if (keys[DIK_A] != 0) cameraTranslate.x -= 0.1f; // 左移動
 		if (keys[DIK_D] != 0) cameraTranslate.x += 0.1f; // 右移動
 		if (keys[DIK_UP] != 0) cameraRotate.x += 0.1f; // 前進

@@ -1,16 +1,14 @@
 #include "PBD.h"
 #include "MassFunction.h"
-void PBD::Initialize(Points startPos, Points endPos, int numPoints, float k, float dt, float kDamping, Vector2 gravity)
+
+void PBD::Initialize(Point startPos, Point endPos, int numPoints )
 {
 	points_.clear();
 	constraints_.clear();
 	startPos_ = startPos.position;// 開始位置を設定
 	endPos_ = endPos.position;// 終了位置を設定
 	numPoints_ = numPoints;// 点の数を設定
-	springStiffness_ = k;// バネ定数を設定
-	dt_ = dt;// タイムステップを設定
-	kDamping_ = kDamping;// ダンピング係数を設定
-	gravity_ = gravity;// 重力を設定
+	
 
 	if (numPoints_ < 2) return; // 2点未満は無効
 
@@ -127,40 +125,4 @@ void PBD::Draw()
 	Novice::DrawEllipse(static_cast<int>(endPos_.x), static_cast<int>((endPos_.y - 500) * -1.0f), 5, 5, 0.0f, BLACK, kFillModeSolid);
 
 }
-
-void PBD::VelocityDamping()
-{
-	Vector2 xcm = Vector2(0.0f, 0.0f);
-	Vector2 vcm = Vector2(0.0f, 0.0f);
-	float totalMass = 0.0f;
-	for (int i = 0; i < numPoints_; i++)
-	{
-		xcm += points_[i].position;
-		vcm += points_[i].velocity;
-		totalMass += points_[i].mass;
-	}
-	xcm /= totalMass;
-	vcm /= totalMass;
-	Vector2 l = Vector2(0.0f, 0.0f);
-	float i = 0.0f;
-	std::vector<Vector2> rs(numPoints_);
-	for (int j = 0; j < numPoints_; j++)
-	{
-		Vector2 r = points_[j].position - xcm;
-		rs[j] = r;
-
-		l += Cross(r, Multiply(points_[j].mass, points_[j].velocity));
-		i += Length(r) * points_[j].mass;
-	}
-	Vector2 omega = Multiply(1.0f / i, l);
-	for (int j = 0; j < numPoints_; j++)
-	{
-		Vector2 deltaV = vcm + Cross(omega, rs[j]) - points_[j].velocity;
-		points_[j].velocity += deltaV * kDamping_;
-	}
-
-
-
-}
-
 

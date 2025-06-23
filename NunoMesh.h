@@ -16,7 +16,7 @@ public:
 
 private:  
 	
-	int kSubdivision_ = 1; // 分割数（1なら2x2=4点）
+	int kSubdivision_ = 2; // 分割数（1なら2x2=4点）
 	std::vector<std::vector<Vector3>> meshPoints_;
 	
 };

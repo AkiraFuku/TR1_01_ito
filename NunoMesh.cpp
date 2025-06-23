@@ -1,6 +1,7 @@
 #include "NunoMesh.h"
 #include "DrawFunction.h" // 3D描画関数がここにあると仮定
 #include <imgui.h>
+#include "PBD.h"
 
 
 void NunoMesh::Initialize() {
@@ -20,8 +21,8 @@ void NunoMesh::Initialize() {
 }
 
 void NunoMesh::Update() {
-    ImGui::SliderFloat3 ("Point[0][0]",&meshPoints_[0][0].x,0.01f, 1.0f, "%.3f");
-    ImGui::SliderFloat3 ("Point[kSubdivision_][kSubdivision_]",&meshPoints_[kSubdivision_][kSubdivision_].x,0.01f, 1.0f, "%.3f");
+    ImGui::SliderFloat3 ("Point[0][0]",&meshPoints_[0][0].x,80.0f, -80.0f, "%.3f");
+    ImGui::SliderFloat3 ("Point[kSubdivision_][kSubdivision_]",&meshPoints_[kSubdivision_][kSubdivision_].x,80.0f, -80.0f, "%.3f");
 
     
 }
@@ -69,20 +70,33 @@ void NunoMesh::Draw(
             // 右隣と線
             if (x + 1 <= kSubdivision_) {
                 Vector3 right = Transform(Transform(meshPoints_[y][x + 1], viewProjectionMatrix), viewportMatrix);
-                Novice::DrawLine(
+                PBD::Point s = {{screen.x,screen.y},true};
+                PBD::Point g ={right.x,right.y};
+                PBD* pbd= new PBD;
+                pbd->Initialize(s,g,2);
+                pbd->Update();
+                pbd->Draw();
+                       
+                /*Novice::DrawLine(
                     static_cast<int>(screen.x), static_cast<int>(screen.y),
                     static_cast<int>(right.x), static_cast<int>(right.y),
                     WHITE
-                );
+                );*/
             }
             // 下隣と線
             if (y + 1 <= kSubdivision_) {
                 Vector3 down = Transform(Transform(meshPoints_[y + 1][x], viewProjectionMatrix), viewportMatrix);
-                Novice::DrawLine(
+                PBD::Point s = {{screen.x,screen.y},true};
+                PBD::Point g ={down.x,down.y};
+                PBD* pbd= new PBD;
+                pbd->Initialize(s,g,2);
+                pbd->Update();
+                pbd->Draw();
+                /*Novice::DrawLine(
                     static_cast<int>(screen.x), static_cast<int>(screen.y),
                     static_cast<int>(down.x), static_cast<int>(down.y),
                     WHITE
-                );
+                );*/
             }
         }
     }
