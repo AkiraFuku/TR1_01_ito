@@ -1,9 +1,9 @@
 #pragma once  
-//#include "PBD.h"  
 #include <vector>  
 #include <KamataEngine.h>
-//#include "PBDLinkConstraint.h"
+#include "PBD.h" // PBDをインクルード
 using namespace KamataEngine;  
+
 class NunoMesh  
 {  
 public:  
@@ -15,8 +15,12 @@ public:
 	);  
 
 private:  
-	
 	int kSubdivision_ = 1; // 分割数（1なら2x2=4点）
-	std::vector<std::vector<Vector3>> meshPoints_;
-	
+
+	// PBD用の頂点情報
+	std::vector<std::vector<PBD::Points>> meshPoints_; // 2次元配列で管理
+	std::vector<PBD::Constraint> constraints_;         // 拘束リスト
+
+	// PBD本体
+	PBD pbd_;
 };
