@@ -1,6 +1,7 @@
 #include "NunoMesh.h"
 #include "DrawFunction.h" // 3D描画関数がここにあると仮定
 #include <imgui.h>
+#include "PBD.h"
 
 
 void NunoMesh::Initialize() {
@@ -13,7 +14,7 @@ void NunoMesh::Initialize() {
         for (int x = 0; x <= kSubdivision_; ++x) {
             float px = -kGridHalfWidth + kGridEvery * x;
             float py = 0.0f; // 高さ
-            float pz = -kGridHalfWidth + kGridEvery * y;
+            float pz = -kGridHalfWidth - kGridEvery * y;
             meshPoints_[y][x] = Vector3{ px, py, pz };
         }
     }
@@ -83,6 +84,20 @@ void NunoMesh::Draw(
                     static_cast<int>(down.x), static_cast<int>(down.y),
                     WHITE
                 );
+            }
+        }
+    }
+}
+
+void NunoMesh::SyncNunoMeshWithPBD(NunoMesh& mesh, const PBD& pbd) {
+    int idx = 0;
+    for (int y = 0; y < mesh.meshPoints_.size(); ++y) {
+        for (int x = 0; x < mesh.meshPoints_[y].size(); ++x) {
+            if (idx < pbd.) {
+                mesh.meshPoints_[y][x].x = pbd.points_[idx].position.x;
+                mesh.meshPoints_[y][x].y = pbd.points_[idx].position.y;
+                // mesh.meshPoints_[y][x].z = 0.0f; // 2Dならzは0
+                ++idx;
             }
         }
     }

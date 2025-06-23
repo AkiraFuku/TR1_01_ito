@@ -13,6 +13,8 @@ public:
 		const Matrix4x4& viewProjectionMatrix,  
 		const Matrix4x4& viewportMatrix  
 	);  
+	void SyncNunoMeshWithPBD(NunoMesh& mesh, const PBD& pbd) ;
+    
 
 private:  
 	

@@ -37,8 +37,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	nuno ->Initialize();
 	Vector3 rotate = { 0.0f, 0.0f, 0.0f };
 	Vector3 traslate = { 0.0f, 0.0f, 0.0f };
-	Vector3 cameraTranslate = { 0.0f, 0.0f, 0.0f };
-	Vector3 cameraRotate = { 0.26f, 0.0f, 0.0f };
+	// カメラを後ろに引いて正面から見る
+	Vector3 cameraTranslate = { 0.0f, 2.0f, -8.0f };
+	Vector3 cameraRotate = { 0.0f, 0.0f, 0.0f };
 
 	// PBDの初期化
 	//pbd->Initialize(startPosition, endPosition, pointCount, k, dt, kDamping, gravity);
@@ -67,14 +68,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		mousePosition.x = static_cast<float>(mouseX);
 		mousePosition.y = static_cast<float>(mouseY);
 
-		if (keys[DIK_W] != 0) cameraTranslate.z += 0.1f; // 前進
-		if (keys[DIK_S] != 0) cameraTranslate.z -= 0.1f; // 後退	
-		if (keys[DIK_A] != 0) cameraTranslate.x -= 0.1f; // 左移動
-		if (keys[DIK_D] != 0) cameraTranslate.x += 0.1f; // 右移動
-		if (keys[DIK_UP] != 0) cameraRotate.x += 0.1f; // 前進
-		if (keys[DIK_DOWN] != 0) cameraRotate.x -= 0.1f; // 後退	
-		if (keys[DIK_LEFT] != 0) cameraRotate.y -= 0.1f; // 左移動
-		if (keys[DIK_RIGHT] != 0) cameraRotate.y += 0.1f; // 右移動
+		if (keys[DIK_W] != 0) cameraTranslate.z += 1.0f/60.0f; // 前進
+		if (keys[DIK_S] != 0) cameraTranslate.z -= 1.0f/60.0f; // 後退	
+		if (keys[DIK_A] != 0) cameraTranslate.x -= 1.0f/60.0f; // 左移動
+		if (keys[DIK_D] != 0) cameraTranslate.x += 1.0f/60.0f; // 右移動
+		if (keys[DIK_UP] != 0) cameraRotate.x += 1.0f/60.0f; // 前進
+		if (keys[DIK_DOWN] != 0) cameraRotate.x -= 1.0f/60.0f; // 後退	
+		if (keys[DIK_LEFT] != 0) cameraRotate.y -= 1.0f/60.0f; // 左移動
+		if (keys[DIK_RIGHT] != 0) cameraRotate.y += 1.0f/60.0f; // 右移動
 		ImGui::Begin("PBD Control Panel");
 		//ImGui::SliderFloat("Spring Constant (k)", &k, 0.0f, 1.0f, "%.3f");
 //		ImGui::SliderFloat("Delta Time", &dt, 0.01f, 1.0f, "%.3f");

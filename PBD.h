@@ -21,6 +21,7 @@ public:
 		float mass;// 質点の質量
 		bool isFixed ;
 	};
+	
 	struct Constraint{
 		int prevIndex;//ひとつ前の質点
 		int nextIndex;//ひとつ次の質点
@@ -31,6 +32,7 @@ public:
 	void Update();
 	void Draw();
 
+	
 	void SetEndPos(Vector2 endPos) {
 		endPos_ = endPos;
 	} // Set the end position of the path
@@ -48,12 +50,17 @@ public:
 	void SetMass(float mass){
 		for (int i = 0; i < points_.size(); i++)
 		{
-			points_[i].mass=mass;
+			points_[i]->mass=mass;
 
 		}
 	
 	
 	}
+
+	Points* GetPointsByIndex(int index){return points_[index];}
+	
+    // points_配列のconst参照を返すゲッター
+    const std::vector<Points*>& GetPoints() const { return points_; }
 	
 private:
 	Vector2 startPos_; // パスの開始位置
@@ -64,7 +71,7 @@ private:
 	float dt_;//デルタ時間
 	float kDamping_; // Damping係数
 	Vector2 gravity_; // Gravity vector
-	std::vector<Points> points_; //パーティクルのリスト
+	std::vector<Points*> points_; //パーティクルのリスト
 	std::vector<Constraint> constraints_; // 接続のリスト
 	
 	
