@@ -1,5 +1,6 @@
 #include "PBD.h"
 #include "MassFunction.h"
+
 void PBD::Initialize(Vector2 startPos, Vector2 endPos, int numPoints, float k, float dt, float kDamping, Vector2 gravity)
 {
 	points_.clear();
@@ -41,6 +42,10 @@ void PBD::Initialize(Vector2 startPos, Vector2 endPos, int numPoints, float k, f
 
 	}
 }
+
+
+
+
 
 void PBD::Update()
 {
@@ -96,6 +101,7 @@ void PBD::Update()
 		}
 	}
 }
+
 
 void PBD::Draw()
 {

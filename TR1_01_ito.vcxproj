@@ -113,7 +113,6 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MassFunction.cpp" />
     <ClCompile Include="PBD.cpp" />
-    <ClCompile Include="PBDMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\DirectXGame\3d\Camera.h" />
@@ -146,7 +145,6 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="DrawFunction.h" />
     <ClInclude Include="MassFunction.h" />
     <ClInclude Include="PBD.h" />
-    <ClInclude Include="PBDMesh.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

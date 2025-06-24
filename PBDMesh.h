@@ -3,11 +3,11 @@
 #include <vector> // std::vector‚ÌéŒ¾‚ğ’Ç‰Á  
 //#include "MassFunction.h"
 using namespace KamataEngine;
-class PBDMesh  
+class nuno  
 {  
 public:  
 	void Initialize(Vector2 startPos, Vector2 endPos, int numPoints, Vector2 gravity);  
-	void Update();  
+	void Update();
 	void Draw(const Matrix4x4& viewProjectionMatrix,
 	const Matrix4x4& viewportMatrix);  
 

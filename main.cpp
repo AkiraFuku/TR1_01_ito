@@ -37,7 +37,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 traslate = { 0.0f, 0.0f, 0.0f };
 	Vector3 cameraTranslate = { 0.0f, 1.9f, -6.49f };
 	Vector3 cameraRotate = { 0.26f, 0.0f, 0.0f };*/
-
+	std::vector<PBD> pbds;
 	// PBDの初期化
 	pbd->Initialize(startPosition, endPosition, pointCount, k, dt, kDamping, gravity);
 	//pbd->InitPoints();
