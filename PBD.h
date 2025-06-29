@@ -2,6 +2,7 @@
 #include <KamataEngine.h>
 #include <Novice.h>
 #include<vector>
+#include<array>
 using namespace KamataEngine;
 
 
@@ -63,7 +64,9 @@ private:
 	float springStiffness_;//バネの硬さ
 	float dt_;//デルタ時間
 	float kDamping_; // Damping係数
+	int solverIterations_=5;//制約解決の試行数
 	Vector2 gravity_; // Gravity vector
+
 	std::vector<Points> points_; //パーティクルのリスト
 	std::vector<Constraint> constraints_; // 接続のリスト
 	

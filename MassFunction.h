@@ -26,18 +26,15 @@ void VectorScreenPrintf( int x, int y,Vector3& vector, const char* label);
 
 // 代入演算子オーバーロード
 Vector3& operator+=(Vector3& lhs, const Vector3& rhv);
+Vector2& operator+=(Vector2& lhs, const Vector2& rhv);
 Vector3& operator-=(Vector3& lhs, const Vector3& rhv);
+Vector2& operator-=(Vector2& lhs, const Vector2& rhv);
 Vector3& operator*=(Vector3& v, float s);
 Vector3& operator*(Vector3& v, float s);
 Vector3& operator/=(Vector3& v, float s);
 Vector2& operator/=(Vector2& v, float s);
 
-Vector2& operator+(Vector2& lhs, const Vector2& rhv);
-Vector2& operator+=(Vector2& lhs, const Vector2& rhv);
-Vector2& operator-(Vector2& lhs, const Vector2& rhv);
-Vector2& operator-=(Vector2& lhs, const Vector2& rhv);
-Vector2& operator*(Vector2& v, float s);
-Vector2& operator/(Vector2& v, float s);
+
 
 
 ///
@@ -142,6 +139,7 @@ Matrix4x4 MakeRotateZMatrix( float radian);
 	/// <param name="v2">ベクトル２</param>
 	/// <returns></returns>
 	float Dot(const Vector3& v1,const Vector3& v2);
+	float Dot(const Vector2& v1,const Vector2& v2);
 	/// <summary>
 	/// Length
 	/// </summary>
@@ -158,3 +156,5 @@ Matrix4x4 MakeRotateZMatrix( float radian);
 	Vector2 Normalize(const Vector2& v);
 
 	Vector2 Lerp(const Vector2& v1, const Vector2& v2, float t);
+	/// <summary>	///スカラー割/// </summary>
+	Vector2 Division(float scalar,const Vector2& v);

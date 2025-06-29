@@ -11,10 +11,25 @@ Vector3& operator+=(Vector3& lhv, const Vector3& rhv) {
 	return lhv;
 }
 
+Vector2& operator+=(Vector2& lhs, const Vector2& rhv)
+{
+	lhs.x += rhv.x;
+	lhs.y += rhv.y;
+	return lhs;
+}
+
 Vector3& operator-=(Vector3& lhv, const Vector3& rhv) {
 	lhv.x -= rhv.x;
 	lhv.y -= rhv.y;
 	lhv.z -= rhv.z;
+	return lhv;
+}
+
+Vector2& operator-=(Vector2& lhv, const Vector2& rhv)
+{
+	lhv.x -= rhv.x;
+	lhv.y -= rhv.y;
+	
 	return lhv;
 }
 
@@ -45,42 +60,7 @@ Vector2& operator/=(Vector2& v, float s)
 	v.y /= s;
 	return v;
 }
-Vector2& operator+(Vector2& lhv, const Vector2& rhv) {
-	lhv.x += rhv.x;
-	lhv.y += rhv.y;
-	return lhv;
-}
-Vector2& operator+=(Vector2& lhv, const Vector2& rhv) {
-	lhv.x += rhv.x;
-	lhv.y += rhv.y;
-	return lhv;
-}
 
-Vector2& operator-(Vector2& lhv, const Vector2& rhv) {
-
-	lhv.x -= rhv.x;
-	lhv.y -= rhv.y;
-	return lhv;
-}
-
-Vector2& operator-=(Vector2& lhs, const Vector2& rhv)
-{
-	lhs.x -= rhv.x;
-	lhs.y -= rhv.y;
-	return lhs;
-}
-
-Vector2& operator*(Vector2& v, float s) {
-	v.x *= s;
-	v.y *= s;
-	return v;
-}
-
-Vector2& operator/(Vector2& v, float s) {
-	v.x /= s;
-	v.y /= s;
-	return v;
-}
 
 
 
@@ -536,6 +516,11 @@ Matrix4x4 MakeRotateZMatrix(float radian)
 		float result = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 		return result ;
 	}
+	float Dot(const Vector2& v1, const Vector2& v2)
+	{
+		float result = v1.x * v2.x + v1.y * v2.y;
+		return result ;
+	}
 	//
 	float Length(const Vector3& v){
 		float length = v.x * v.x + v.y * v.y + v.z * v.z;
@@ -589,4 +574,14 @@ Matrix4x4 MakeRotateZMatrix(float radian)
 			std::lerp(v1.y, v2.y, t)
 		};
 		return result;
+	}
+
+	Vector2 Division(float scalar, const Vector2& v)
+	{
+		Vector2 result = {
+				v.x / scalar,
+				v.y / scalar,
+			};
+			return result;
+		
 	}

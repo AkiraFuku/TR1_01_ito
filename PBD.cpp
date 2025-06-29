@@ -47,7 +47,7 @@ void PBD::Update()
 	//外力による加速度を計算
 	for (int i = 0; i < numPoints_; i++)
 	{
-		points_[i].velocity += gravity_ * dt_;
+		points_[i].velocity +=Multiply(dt_, gravity_)  ;
 		if (points_[i].isFixed)
 		{
 			points_[i].velocity = Vector2(0.0f, 0.0f);
@@ -62,7 +62,7 @@ void PBD::Update()
 	for (int i = 0; i < numPoints_; i++)
 	{
 
-		points_[i].estimationPosition = points_[i].position + (points_[i].velocity * dt_);
+		points_[i].estimationPosition = Add(points_[i].position , Multiply(dt_ ,points_[i].velocity ));
 		points_[i].position = points_[i].estimationPosition;
 	}
 
@@ -73,9 +73,10 @@ void PBD::Update()
 	points_[numPoints_ - 1].isFixed = true;
 
 	//速度の更新
-	for (int i = 0; i < constraints_.size(); i++)
+	for (const Constraint& c : constraints_
+)
 	{
-		Constraint c = constraints_[i];
+	
 		Points p1 = points_[c.prevIndex];
 		Points p2 = points_[c.nextIndex];
 		float w1 = 1.0f / p1.mass;// 質量の逆数を計算
@@ -85,14 +86,37 @@ void PBD::Update()
 		Vector2 dp1 = Multiply((-springStiffness_ * w1 / (w1 + w2) * (diff - c.distance)), Normalize(Subtract(p1.position , p2.position)));
 		Vector2 dp2 = Multiply((springStiffness_ * w2 / (w1 + w2) * (diff - c.distance)), Normalize(Subtract(p1.position , p2.position)));
 
-		points_[c.prevIndex].velocity += dp1 / dt_;
-		points_[c.nextIndex].velocity += dp2 / dt_;
+		points_[c.prevIndex].velocity +=Division(dt_, dp1 ) ;
+		points_[c.nextIndex].velocity += Division(dt_,dp2  );
 
 	}
-	for (int i = 0; i < numPoints_; i++) {
-		if (points_[i].isFixed)
-		{
-			points_[i].velocity = Vector2(0.0f, 0.0f);
+	
+
+	// Solver iterations for constraints
+	for (int iter = 0; iter < solverIterations_; ++iter) {
+		for (const Constraint& c : constraints_) {
+			PBD::Points& p1 = points_[c.prevIndex];
+			PBD::Points& p2 = points_[c.nextIndex];
+
+			// 推定位置を参照
+			Vector2& x1 = p1.estimationPosition;
+			Vector2& x2 = p2.estimationPosition;
+
+			// 両方固定ならスキップ
+			if (p1.isFixed && p2.isFixed) continue;
+
+			Vector2 delta =Subtract( x2,  x1);
+			float dist = Length(delta);
+			if (dist == 0.0f) continue;
+			Vector2 correction = Multiply((c.distance - dist) , Division(dist,delta  ));
+
+			float w1 = p1.isFixed ? 0.0f : 1.0f / p1.mass;
+			float w2 = p2.isFixed ? 0.0f : 1.0f / p2.mass;
+			float wsum = w1 + w2;
+			if (wsum == 0.0f) continue;
+
+			if (!p1.isFixed){ x1 -=Multiply((w1 / wsum) ,correction );} 
+			if (!p2.isFixed) {x2 +=Multiply( (w2 / wsum), correction );}
 		}
 	}
 }
@@ -140,8 +164,9 @@ void PBD::VelocityDamping()
 	float totalMass = 0.0f;
 	for (int i = 0; i < numPoints_; i++)
 	{
-		xcm += points_[i].position;
-		vcm += points_[i].velocity;
+		if (points_[i].isFixed){continue;}
+		xcm +=Multiply(points_[i].mass,points_[i].position ) ;
+		vcm +=Multiply( points_[i].mass , points_[i].velocity);
 		totalMass += points_[i].mass;
 	}
 	xcm /= totalMass;
@@ -151,21 +176,29 @@ void PBD::VelocityDamping()
 	std::vector<Vector2> rs(numPoints_);
 	for (int j = 0; j < numPoints_; j++)
 	{
-		Vector2 r = points_[j].position - xcm;
+		Vector2 r = Subtract(points_[j].position , xcm);
 		rs[j] = r;
 
 		l += Cross(r, Multiply(points_[j].mass, points_[j].velocity));
-		i += Length(r) * points_[j].mass;
+		i += Dot(r, r) * points_[j].mass;
 	}
 	Vector2 omega = Multiply(1.0f / i, l);
 	for (int j = 0; j < numPoints_; j++)
 	{
-		Vector2 deltaV = vcm + Cross(omega, rs[j]) - points_[j].velocity;
-		points_[j].velocity += deltaV * kDamping_;
+		if (points_[j].isFixed){ continue;}
+		Vector2 deltaV =Subtract( Add(vcm , Cross(omega, rs[j])) , points_[j].velocity);
+		points_[j].velocity +=Multiply(kDamping_, deltaV)  ;
 	}
 
 
 
 }
+
+
+
+
+
+
+
 
 
