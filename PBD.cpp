@@ -56,21 +56,18 @@ void PBD::Update()
 	}
 
 	//ベロシティ　ダンピング
-	//VelocityDamping();
+	
 
 	// 位置の更新
+	std::vector<Vector2> oldPosition(numPoints_);
 	for (int i = 0; i < numPoints_; i++)
 	{
-
+		oldPosition[i] = points_[i].position;
 		points_[i].estimationPosition = Add(points_[i].position , Multiply(dt_ ,points_[i].velocity ));
 		points_[i].position = points_[i].estimationPosition;
 	}
 
-	points_[0].position = startPos_;
-	points_[0].isFixed = true;
-	// 最後の点をendPosに固定
-	points_[numPoints_ - 1].position = endPos_;
-	points_[numPoints_ - 1].isFixed = true;
+
 
 	//速度の更新
 	for (const Constraint& c : constraints_
@@ -119,6 +116,24 @@ void PBD::Update()
 			if (!p2.isFixed) {x2 +=Multiply( (w2 / wsum), correction );}
 		}
 	}
+
+	// 制約解決後に追加
+	for (int i = 0; i < numPoints_; i++) {
+		points_[i].position = points_[i].estimationPosition;
+	}
+
+	// Update velocity after position update
+	for (int i = 0; i < numPoints_; i++) {
+		if (!points_[i].isFixed) {
+			points_[i].velocity =Division(dt_, Subtract(points_[i].position , oldPosition[i]))  ;
+		}
+	}
+	points_[0].position = startPos_;
+	points_[0].isFixed = true;
+	// 最後の点をendPosに固定
+	points_[numPoints_ - 1].position = endPos_;
+	points_[numPoints_ - 1].isFixed = true;
+	VelocityDamping();
 }
 
 void PBD::Draw()
