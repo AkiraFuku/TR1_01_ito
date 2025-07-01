@@ -21,14 +21,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Vector2 mousePosition = { 0.0f, 0.0f };
 
-	Vector2 startPosition = { 100.0f, 350.0f };
-	Vector2 endPosition = { 500.0f, 350.0f };
+	Vector3 startPosition = { 100.0f, 350.0f,0.0f };
+	Vector3 endPosition = { 500.0f, 350.0f,0.0f };
 
 	PBD* pbd = new PBD;
 	int pointCount = 10;// 点の数
 	float k = 0.1f; // バネの定数
 	const float dt = 1.f / 60.f; // デルタタイム
-	Vector2 gravity = { 0.0f, 9.8f }; // 重力ベクトル
+	Vector3 gravity = { 0.0f, 9.8f ,0.0f}; // 重力ベクトル
 
 	float kDamping = 0.05f; // 減衰率
 	float m = 1.0f;

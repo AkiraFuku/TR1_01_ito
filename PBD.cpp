@@ -1,6 +1,6 @@
 #include "PBD.h"
 #include "MassFunction.h"
-void PBD::Initialize(Vector2 startPos, Vector2 endPos, int numPoints, float k, float dt, float kDamping, Vector2 gravity)
+void PBD::Initialize(Vector3 startPos, Vector3 endPos, int numPoints, float k, float dt, float kDamping, Vector3 gravity)
 {
 	points_.clear();
 	constraints_.clear();
@@ -26,7 +26,7 @@ void PBD::Initialize(Vector2 startPos, Vector2 endPos, int numPoints, float k, f
 		points_[i].position = Lerp(startPos_, endPos_, t);// 初期位置を線形補間で設定
 
 		points_[i].estimationPosition = points_[i].position; // 初期位置を設定	
-		points_[i].velocity = Vector2(0.0f, 0.0f);// 初期速度をゼロに設定
+		points_[i].velocity = Vector3(0.0f, 0.0f,0.0f);// 初期速度をゼロに設定
 		points_[i].mass = 1.0f;// 質量を1.0に設定
 
 	}
@@ -51,7 +51,7 @@ void PBD::Update()
 		points_[i].velocity +=Multiply(dt_, gravity_)  ;
 		if (points_[i].isFixed)
 		{
-			points_[i].velocity = Vector2(0.0f, 0.0f);
+			points_[i].velocity = Vector3(0.0f, 0.0f,0.0f);
 		}
 
 	}
@@ -60,7 +60,7 @@ void PBD::Update()
 	
 
 	// 位置の更新
-	std::vector<Vector2> oldPosition(numPoints_);
+	std::vector<Vector3> oldPosition(numPoints_);
 	for (int i = 0; i < numPoints_; i++)
 	{
 		oldPosition[i] = points_[i].position;
@@ -82,8 +82,8 @@ void PBD::Update()
 		float w2 = 1.0f / p2.mass;// 質量の逆数を計算
 
 		float diff = Length(Subtract(p1.position , p2.position));
-		Vector2 dp1 = Multiply((-springStiffness_ * w1 / (w1 + w2) * (diff - c.distance)), Normalize(Subtract(p1.position , p2.position)));
-		Vector2 dp2 = Multiply((springStiffness_ * w2 / (w1 + w2) * (diff - c.distance)), Normalize(Subtract(p1.position , p2.position)));
+		Vector3 dp1 = Multiply((-springStiffness_ * w1 / (w1 + w2) * (diff - c.distance)), Normalize(Subtract(p1.position , p2.position)));
+		Vector3 dp2 = Multiply((springStiffness_ * w2 / (w1 + w2) * (diff - c.distance)), Normalize(Subtract(p1.position , p2.position)));
 
 		points_[c.prevIndex].velocity +=Division(dt_, dp1 ) ;
 		points_[c.nextIndex].velocity += Division(dt_,dp2  );
@@ -98,18 +98,18 @@ void PBD::Update()
 			PBD::Points& p2 = points_[c.nextIndex];
 
 			// 推定位置を参照
-			Vector2& x1 = p1.estimationPosition;
-			Vector2& x2 = p2.estimationPosition;
+			Vector3& x1 = p1.estimationPosition;
+			Vector3& x2 = p2.estimationPosition;
 
 			// 両方固定ならスキップ
 			if (p1.isFixed && p2.isFixed) continue;
 
-			Vector2 delta =Subtract( x2,  x1);
+			Vector3 delta =Subtract( x2,  x1);
 			float dist = Length(delta);
 			if (dist == 0.0f) {
 				continue;
 			} // ゼロ距離は無視
-			Vector2 correction = Multiply((c.distance - dist) , Division(dist,delta  ));
+			Vector3 correction = Multiply((c.distance - dist) , Division(dist,delta  ));
 
 			float w1 = p1.isFixed ? 0.0f : 1.0f / p1.mass;
 			float w2 = p2.isFixed ? 0.0f : 1.0f / p2.mass;
@@ -180,8 +180,8 @@ void PBD::Draw()
 
 void PBD::VelocityDamping()
 {
-	Vector2 xcm = Vector2(0.0f, 0.0f);
-	Vector2 vcm = Vector2(0.0f, 0.0f);
+	Vector3 xcm = Vector3(0.0f, 0.0f,0.0f);
+	Vector3 vcm = Vector3(0.0f, 0.0f,0.0);
 	float totalMass = 0.0f;
 	for (int i = 0; i < numPoints_; i++)
 	{
@@ -192,22 +192,22 @@ void PBD::VelocityDamping()
 	}
 	xcm /= totalMass;
 	vcm /= totalMass;
-	Vector2 l = Vector2(0.0f, 0.0f);
+	Vector3 l = Vector3(0.0f, 0.0f,0.0f);
 	float i = 0.0f;
-	std::vector<Vector2> rs(numPoints_);
+	std::vector<Vector3> rs(numPoints_);
 	for (int j = 0; j < numPoints_; j++)
 	{
-		Vector2 r = Subtract(points_[j].position , xcm);
+		Vector3 r = Subtract(points_[j].position , xcm);
 		rs[j] = r;
 
 		l += Cross(r, Multiply(points_[j].mass, points_[j].velocity));
 		i += Dot(r, r) * points_[j].mass;
 	}
-	Vector2 omega = Multiply(1.0f / i, l);
+	Vector3 omega = Multiply(1.0f / i, l);
 	for (int j = 0; j < numPoints_; j++)
 	{
 		if (points_[j].isFixed){ continue;}
-		Vector2 deltaV =Subtract( Add(vcm , Cross(omega, rs[j])) , points_[j].velocity);
+		Vector3 deltaV =Subtract( Add(vcm , Cross(omega, rs[j])) , points_[j].velocity);
 		points_[j].velocity +=Multiply(kDamping_, deltaV)  ;
 	}
 
