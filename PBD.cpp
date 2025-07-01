@@ -31,7 +31,6 @@ void PBD::Initialize(Vector2 startPos, Vector2 endPos, int numPoints, float k, f
 
 	}
 	points_[0].isFixed = true;
-	//points_[1].isFixed = true;
 	points_[numPoints_ - 1].isFixed = true;
 
 	for (int i = 0; i < numPoints_ - 1; i++) {
@@ -40,6 +39,8 @@ void PBD::Initialize(Vector2 startPos, Vector2 endPos, int numPoints, float k, f
 		constraints_[i].distance = Length(Subtract(points_[i].position, points_[i + 1].position)); // 初期距離を設定 
 
 	}
+
+	
 }
 
 void PBD::Update()
@@ -55,7 +56,7 @@ void PBD::Update()
 
 	}
 
-	//ベロシティ　ダンピング
+	
 	
 
 	// 位置の更新
@@ -76,6 +77,7 @@ void PBD::Update()
 	
 		Points p1 = points_[c.prevIndex];
 		Points p2 = points_[c.nextIndex];
+		if (p1.isFixed && p2.isFixed) {continue;} // 両方固定ならスキップ
 		float w1 = 1.0f / p1.mass;// 質量の逆数を計算
 		float w2 = 1.0f / p2.mass;// 質量の逆数を計算
 
@@ -104,7 +106,9 @@ void PBD::Update()
 
 			Vector2 delta =Subtract( x2,  x1);
 			float dist = Length(delta);
-			if (dist == 0.0f) continue;
+			if (dist == 0.0f) {
+				continue;
+			} // ゼロ距離は無視
 			Vector2 correction = Multiply((c.distance - dist) , Division(dist,delta  ));
 
 			float w1 = p1.isFixed ? 0.0f : 1.0f / p1.mass;
@@ -115,6 +119,8 @@ void PBD::Update()
 			if (!p1.isFixed){ x1 -=Multiply((w1 / wsum) ,correction );} 
 			if (!p2.isFixed) {x2 +=Multiply( (w2 / wsum), correction );}
 		}
+
+		
 	}
 
 	// 制約解決後に追加
@@ -129,10 +135,10 @@ void PBD::Update()
 		}
 	}
 	points_[0].position = startPos_;
-	points_[0].isFixed = true;
+	//points_[0].isFixed = true;
 	// 最後の点をendPosに固定
 	points_[numPoints_ - 1].position = endPos_;
-	points_[numPoints_ - 1].isFixed = true;
+//	points_[numPoints_ - 1].isFixed = true;
 	VelocityDamping();
 }
 
