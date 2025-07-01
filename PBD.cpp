@@ -142,17 +142,20 @@ void PBD::Update()
 	VelocityDamping();
 }
 
-void PBD::Draw()
+void PBD::Draw(
+	Matrix4x4 viewProjectionMatrix, // ビュープロジェクション行列
+	Matrix4x4 viewPortMatrix // ビューポート行列
+)
 {
 
-
-
-
+	//std::vector<Vector3> screenPoints(numPoints_);
+	
 	for (int i = 0; i < points_.size(); i++)
 	{
 
+		Vector3 screen = Transform(Transform(points_[i].position, viewProjectionMatrix), viewPortMatrix);
 
-		Vector2 screen{ points_[i].position.x,(points_[i].position.y - 500) * -1.0f };
+		
 
 
 		Novice::DrawEllipse(static_cast<int>(screen.x), static_cast<int>(screen.y), 5, 5, 0.0f, WHITE, kFillModeSolid);
@@ -166,15 +169,17 @@ void PBD::Draw()
 		Points p1 = points_[c.prevIndex];
 		Points p2 = points_[c.nextIndex];
 
-		int x1 = static_cast<int>(p1.position.x);
-		int y1 = static_cast<int>((p1.position.y - 500) * -1.0f);
-		int x2 = static_cast<int>(p2.position.x);
-		int y2 = static_cast<int>((p2.position.y - 500) * -1.0f);
-		Novice::DrawLine(x1, y1, x2, y2, WHITE);
+		Vector3 p1Screen = Transform(Transform(p1.position, viewProjectionMatrix), viewPortMatrix);
+		Vector3 p2Screen = Transform(Transform(p2.position, viewProjectionMatrix), viewPortMatrix);
+		
+		Novice::DrawLine(static_cast<int>(p1Screen.x),static_cast<int>(p1Screen.y),static_cast<int>(p2Screen.x),static_cast<int>(p2Screen.x), WHITE);
 	}
 
-	Novice::DrawEllipse(static_cast<int>(startPos_.x), static_cast<int>((startPos_.y - 500) * -1.0f), 5, 5, 0.0f, RED, kFillModeSolid);
-	Novice::DrawEllipse(static_cast<int>(endPos_.x), static_cast<int>((endPos_.y - 500) * -1.0f), 5, 5, 0.0f, BLACK, kFillModeSolid);
+	// 開始位置と終了位置の描画
+	Vector3 startScreen = Transform(Transform(startPos_, viewProjectionMatrix), viewPortMatrix);
+	Vector3 endScreen = Transform(Transform(endPos_, viewProjectionMatrix), viewPortMatrix);
+	Novice::DrawEllipse(static_cast<int>(startScreen.x), static_cast<int>(startScreen.y  ), 5, 5, 0.0f, RED, kFillModeSolid);
+	Novice::DrawEllipse(static_cast<int>(endScreen.x), static_cast<int>(endScreen.y ), 5, 5, 0.0f, BLACK, kFillModeSolid);
 
 }
 

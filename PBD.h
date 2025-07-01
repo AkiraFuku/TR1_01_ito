@@ -31,7 +31,10 @@ public:
 	
 	void Initialize(Vector3 startPos, Vector3 endPos, int numPoints, float k, float dt, float kDamping, Vector3 gravity);
 	void Update();
-	void Draw();
+	void Draw(
+	Matrix4x4 viewProjectionMatrix, // ビュープロジェクション行列
+	Matrix4x4 viewPortMatrix // ビューポート行列
+	);
 
 	void SetEndPos(Vector3 endPos) {
 		endPos_ = endPos;

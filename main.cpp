@@ -33,10 +33,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float kDamping = 0.05f; // 減衰率
 	float m = 1.0f;
 
-	/*Vector3 rotate = { 0.0f, 0.0f, 0.0f };
+	Vector3 rotate = { 0.0f, 0.0f, 0.0f };
 	Vector3 traslate = { 0.0f, 0.0f, 0.0f };
 	Vector3 cameraTranslate = { 0.0f, 1.9f, -6.49f };
-	Vector3 cameraRotate = { 0.26f, 0.0f, 0.0f };*/
+	Vector3 cameraRotate = { 0.26f, 0.0f, 0.0f };
 
 	// PBDの初期化
 	pbd->Initialize(startPosition, endPosition, pointCount, k, dt, kDamping, gravity);
@@ -81,17 +81,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		pbd->SetEndPos(endPosition);
 		pbd->Update();
 
-		//Matrix4x4 worldMatrix = MakeAfineMatrix({ 1.0f, 1.0f, 1.0f }, rotate, traslate);
+		Matrix4x4 worldMatrix = MakeAfineMatrix({ 1.0f, 1.0f, 1.0f }, rotate, traslate);
 		////MatrixScreenPrintf(0, kRowHeight, worldMatrix, "worldMatrix");
-		//Matrix4x4 cameraMatrix = MakeAfineMatrix({ 1.0f, 1.0f, 1.0f },cameraRotate,cameraTranslate );
+		Matrix4x4 cameraMatrix = MakeAfineMatrix({ 1.0f, 1.0f, 1.0f },cameraRotate,cameraTranslate );
 		////MatrixScreenPrintf(0, kRowHeight * 20, cameraMatrix, "cameraMatrix");
-		//Matrix4x4 viewMatrix = Inverse(cameraMatrix);
+		Matrix4x4 viewMatrix = Inverse(cameraMatrix);
 		////MatrixScreenPrintf(0, kRowHeight * 30, viewMatrix, "viewMatrix");
-		//Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, static_cast<float>(kwindowWidth)/static_cast <float>(kwindowHight) , 0.1f, 100.0f);
+		Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, static_cast<float>(kwindowWidth)/static_cast <float>(kwindowHight) , 0.1f, 100.0f);
 		////MatrixScreenPrintf(kColumnWidth*10, kRowHeight  , projectionMatrix, "projectionMatrix");
-		//Matrix4x4 worldViewProjectionMatrix = Multiply( worldMatrix,Multiply(viewMatrix,projectionMatrix));
+		Matrix4x4 worldViewProjectionMatrix = Multiply( worldMatrix,Multiply(viewMatrix,projectionMatrix));
+		Matrix4x4 viewProjectionMatrix = Multiply(viewMatrix, projectionMatrix);
 		////MatrixScreenPrintf(kColumnWidth*10, kRowHeight * 20, worldViewProjectionMatrix, "worldViewProjectionMatrix");
-		//Matrix4x4 viewportMatrix = MakeViewportMatrix(0.0f, 0.0f, static_cast<float>(kwindowWidth), static_cast<float>(kwindowHight), 0.0f, 1.0f);
+		Matrix4x4 viewportMatrix = MakeViewportMatrix(0.0f, 0.0f, static_cast<float>(kwindowWidth), static_cast<float>(kwindowHight), 0.0f, 1.0f);
 		///
 		/// ↑更新処理ここまで
 		///
@@ -99,7 +100,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-		pbd->Draw();
+		pbd->Draw(viewProjectionMatrix,viewportMatrix);
 
 		///
 		/// ↑描画処理ここまで
