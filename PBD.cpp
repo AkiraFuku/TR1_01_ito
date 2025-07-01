@@ -202,8 +202,12 @@ void PBD::VelocityDamping()
 	std::vector<Vector3> rs(numPoints_);
 	for (int j = 0; j < numPoints_; j++)
 	{
+		if (points_[j].isFixed) {
+			continue;
+		}
 		Vector3 r = Subtract(points_[j].position , xcm);
 		rs[j] = r;
+
 
 		l += Cross(r, Multiply(points_[j].mass, points_[j].velocity));
 		i += Dot(r, r) * points_[j].mass;

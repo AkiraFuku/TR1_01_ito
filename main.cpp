@@ -66,11 +66,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		mousePosition.y = static_cast<float>(mouseY);
 
 		ImGui::Begin("PBD Control Panel");
-		ImGui::SliderFloat("Spring Constant (k)", &k, 0.0f, 1.0f, "%.3f");
-		ImGui::SliderFloat("Mass", &m, 0.01f, 10.0f, "%.3f");
-		ImGui::SliderFloat2("startPos", &startPosition.x, 0.01f, 1280.0f, "%.3f");
-		ImGui::SliderFloat2("EndPos", &endPosition.x, 0.01f, 1280.0f, "%.3f");
-		ImGui::SliderFloat3("Camera Pos", &cameraTranslate.x, -20.0f, 20.0f, "%.2f");
+		//ImGui::SliderFloat("Spring Constant (k)", &k, 0.0f, 1.0f, "%.3f");
+		//ImGui::SliderFloat("Mass", &m, 0.01f, 10.0f, "%.3f");
+		ImGui::SliderFloat3("startPos", &startPosition.x, 0.01f, 1280.0f, "%.3f");
+		ImGui::SliderFloat3("EndPos", &endPosition.x, 0.01f, 1280.0f, "%.3f");
+		ImGui::SliderFloat3("Camera Pos", &cameraTranslate.x, -1280.0f, 1280.0f, "%.2f");
 
 		ImGui::End();
 		pbd->setK(k);
