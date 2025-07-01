@@ -172,7 +172,7 @@ void PBD::Draw(
 		Vector3 p1Screen = Transform(Transform(p1.position, viewProjectionMatrix), viewPortMatrix);
 		Vector3 p2Screen = Transform(Transform(p2.position, viewProjectionMatrix), viewPortMatrix);
 		
-		Novice::DrawLine(static_cast<int>(p1Screen.x),static_cast<int>(p1Screen.y),static_cast<int>(p2Screen.x),static_cast<int>(p2Screen.x), WHITE);
+		Novice::DrawLine(static_cast<int>(p1Screen.x),static_cast<int>(p1Screen.y),static_cast<int>(p2Screen.x),static_cast<int>(p2Screen.y), WHITE);
 	}
 
 	// 開始位置と終了位置の描画
