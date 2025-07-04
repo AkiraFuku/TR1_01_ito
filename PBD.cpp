@@ -4,6 +4,7 @@ void PBD::Initialize(Vector3 startPos, Vector3 endPos, int numPoints, float k, f
 {
 	points_.clear();
     constraints_.clear();
+    bendConstraints_.clear();
     startPos_ = startPos;
     endPos_ = endPos;
     numPoints_ = numPoints;
@@ -38,7 +39,39 @@ void PBD::Initialize(Vector3 startPos, Vector3 endPos, int numPoints, float k, f
     points_[0][0].isFixed = true;
     points_[numPoints_ - 1][numPoints_ - 1].isFixed = true;
 
-    // 制約の生成（省略、既存のままでOK）
+    // 横方向の曲げ制約
+    for (int i = 0; i < numPoints_ - 2; ++i) {
+        for (int j = 0; j < numPoints_; ++j) {
+            float rest = Length(Subtract(points_[i][j].position, points_[i + 2][j].position));
+            BendConstraint bc = {i, j, i + 2, j, rest};
+            bendConstraints_.push_back(bc);
+        }
+    }
+    // 縦方向の曲げ制約
+    for (int i = 0; i < numPoints_; ++i) {
+        for (int j = 0; j < numPoints_ - 2; ++j) {
+            float rest = Length(Subtract(points_[i][j].position, points_[i][j + 2].position));
+            BendConstraint bc = {i, j, i, j + 2, rest};
+            bendConstraints_.push_back(bc);
+        }
+    }
+
+    // 横方向の距離制約
+    for (int i = 0; i < numPoints_ - 1; ++i) {
+        for (int j = 0; j < numPoints_; ++j) {
+            float rest = Length(Subtract(points_[i][j].position, points_[i + 1][j].position));
+            Constraint c = {i, i + 1, j, j, rest};
+            constraints_.push_back(c);
+        }
+    }
+    // 縦方向の距離制約
+    for (int i = 0; i < numPoints_; ++i) {
+        for (int j = 0; j < numPoints_ - 1; ++j) {
+            float rest = Length(Subtract(points_[i][j].position, points_[i][j + 1].position));
+            Constraint c = {i, i, j, j + 1, rest};
+            constraints_.push_back(c);
+        }
+    }
 }
 
 void PBD::Update()
@@ -131,7 +164,20 @@ void PBD::Update()
 			}
 		}
 
+		// Bend constraints
+		for (const BendConstraint& bc : bendConstraints_) {
+			Points& p1 = points_[bc.i1][bc.j1];
+			Points& p2 = points_[bc.i2][bc.j2];
+			if (p1.isFixed && p2.isFixed) continue;
 
+			Vector3 delta = Subtract(p2.estimationPosition, p1.estimationPosition);
+			float dist = Length(delta);
+			if (dist == 0.0f) continue;
+			Vector3 correction = Multiply((dist - bc.restLength) / dist * 0.5f, delta);
+
+			if (!p1.isFixed) p1.estimationPosition += correction;
+			if (!p2.isFixed) p2.estimationPosition -= correction;
+		}
 	}
 
 	// 制約解決後に追加

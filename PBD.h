@@ -32,6 +32,12 @@ public:
 
 	};
 	
+	struct BendConstraint {
+		int i1, j1; // 1つ目の点
+		int i2, j2; // 2つ目の点（2つ離れた点）
+		float restLength; // 元の距離
+	};
+
 	void Initialize(Vector3 startPos, Vector3 endPos, int numPoints, float k, float dt, float kDamping, Vector3 gravity);
 	void Update();
 	void Draw(
@@ -74,6 +80,7 @@ private:
 
 	std::vector<std::vector<Points>> points_; //パーティクルのリスト
 	std::vector<Constraint> constraints_; // 接続のリスト
+	std::vector<BendConstraint> bendConstraints_; // Bend constraints list
 	
 	
 

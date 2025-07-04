@@ -28,7 +28,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int pointCount = 3;// 点の数
 	float k = 0.1f; // バネの定数
 	const float dt = 1.f / 60.f; // デルタタイム
-	Vector3 gravity = { 0.0f, 0.0f ,0.0f}; // 重力ベクトル
+	Vector3 gravity = { 0.0f, -9.8f ,0.0f}; // 重力ベクトル
 
 	float kDamping = 0.05f; // 減衰率
 	float m = 1.0f;
