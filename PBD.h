@@ -50,15 +50,13 @@ public:
 	void SetDt(float dt){
 		dt_=dt;
 	}
-	void SetMass(float mass){
-		for (int i = 0; i < points_.size(); i++)
-		{
-			points_[i].mass=mass;
-
-		}
-	
-	
-	}
+    void SetMass(float mass) {  
+        for (int i = 0; i < points_.size(); i++) {  
+            for (int j = 0; j < points_[i].size(); j++) {  
+                points_[i][j].mass = mass;  
+            }  
+        }  
+    }
 	
 private:
 	Vector3 startPos_; // パスの開始位置
@@ -71,7 +69,7 @@ private:
 	int solverIterations_=5;//制約解決の試行数
 	Vector3 gravity_; // Gravity vector
 
-	std::vector<Points> points_; //パーティクルのリスト
+	std::vector<std::vector<Points>> points_; //パーティクルのリスト
 	std::vector<Constraint> constraints_; // 接続のリスト
 	
 	

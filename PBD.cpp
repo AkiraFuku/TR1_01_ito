@@ -14,24 +14,23 @@ void PBD::Initialize(Vector3 startPos, Vector3 endPos, int numPoints, float k, f
 
 	if (numPoints_ < 2) return; // 2点未満は無効
 
-	points_.resize(numPoints_);// 点の数だけポイントを確保
+	 points_.resize(numPoints_);
+    for (int i = 0; i < numPoints_; ++i) {
+        points_[i].resize(numPoints_);
+    }// 点の数だけポイントを確保
 	constraints_.resize(numPoints_ - 1);// 制約の数は点の数 - 1
 
 	for (int i = 0; i < numPoints_; i++) {
-
-		float t = static_cast<float>(i) / static_cast<float>((numPoints_ - 1));
-
-
-
-		points_[i].position = Lerp(startPos_, endPos_, t);// 初期位置を線形補間で設定
-
-		points_[i].estimationPosition = points_[i].position; // 初期位置を設定	
-		points_[i].velocity = Vector3(0.0f, 0.0f,0.0f);// 初期速度をゼロに設定
-		points_[i].mass = 1.0f;// 質量を1.0に設定
-
-	}
-	points_[0].isFixed = true;
-	points_[numPoints_ - 1].isFixed = true;
+        float t = static_cast<float>(i) / static_cast<float>((numPoints_ - 1));
+        for (int j = 0; j < numPoints_; j++) {
+            points_[i][j].position = Lerp(startPos_, endPos_, t);
+            points_[i][j].estimationPosition = points_[i][j].position;
+            points_[i][j].velocity = Vector3(0.0f, 0.0f, 0.0f);
+            points_[i][j].mass = 1.0f;
+        }
+    }
+    points_[0][0].isFixed = true;
+    points_[numPoints_ - 1][numPoints_ - 1].isFixed = true;
 
 	for (int i = 0; i < numPoints_ - 1; i++) {
 		constraints_[i].prevIndex = i;
