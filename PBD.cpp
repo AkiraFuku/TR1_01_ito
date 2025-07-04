@@ -241,7 +241,7 @@ void PBD::Draw(
     // 開始位置と終了位置の描画
     Vector3 startScreen = Transform(Transform(startPos_, viewProjectionMatrix), viewPortMatrix);
     Vector3 endScreen = Transform(Transform(endPos_, viewProjectionMatrix), viewPortMatrix);
-    Novice::DrawEllipse(static_cast<int>(startScreen.x), static_cast<int>(startScreen.y), 5, 5, 0.0f, RED, kFillModeSolid);
+    Novice::DrawEllipse(static_cast<int>(startScreen.x), static_cast<int>(startScreen.y), 5, 5, 0.0f, GREEN, kFillModeSolid);
     Novice::DrawEllipse(static_cast<int>(endScreen.x), static_cast<int>(endScreen.y), 5, 5, 0.0f, BLACK, kFillModeSolid);
 }
 

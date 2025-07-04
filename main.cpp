@@ -25,7 +25,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 endPosition = { 1.0f, 1.0f,0.0f };
 
 	PBD* pbd = new PBD;
-	int pointCount = 4;// 点の数
+	int pointCount = 10;// 点の数
 	float k = 0.1f; // バネの定数
 	const float dt = 1.f / 60.f; // デルタタイム
 	Vector3 gravity = { 0.0f, -9.8f ,0.0f}; // 重力ベクトル
@@ -75,8 +75,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("PBD Control Panel");
 		//ImGui::SliderFloat("Spring Constant (k)", &k, 0.0f, 1.0f, "%.3f");
 		//ImGui::SliderFloat("Mass", &m, 0.01f, 10.0f, "%.3f");
-		ImGui::SliderFloat3("startPos", &startPosition.x, 0.01f, 1280.0f, "%.3f");
-		ImGui::SliderFloat3("EndPos", &endPosition.x, 0.01f, 1280.0f, "%.3f");
+		ImGui::SliderFloat3("startPos", &startPosition.x, -2.0f, 1.0f, "%.3f");
+		ImGui::SliderFloat3("EndPos", &endPosition.x, -1.0f, 1.0f, "%.3f");
 		ImGui::SliderFloat3("Camera Pos", &cameraTranslate.x, -1280.0f, 1280.0f, "%.2f");
 		ImGui::SliderFloat3("Camera Rotate", &cameraRotate.x, -1280.0f, 1280.0f, "%.2f");
 
