@@ -22,7 +22,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector2 mousePosition = { 0.0f, 0.0f };
 
 	Vector3 startPosition = { 0.0f, 0.0f,0.0f };
-	Vector3 endPosition = { 50.0f, 0.0f,0.0f };
+	Vector3 endPosition = { 50.0f, 50.0f,0.0f };
 
 	PBD* pbd = new PBD;
 	int pointCount = 10;// 点の数

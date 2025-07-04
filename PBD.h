@@ -24,9 +24,12 @@ public:
 		bool isFixed ;
 	};
 	struct Constraint{
-		int prevIndex;//ひとつ前の質点
-		int nextIndex;//ひとつ次の質点
+		int prevI;//ひとつ前の質点
+		int nextI;//ひとつ次の質点
+		int prevJ;//ひとつ前の質点の行
+		int nextJ;//ひとつ次の質点の行
 		float distance;//
+
 	};
 	
 	void Initialize(Vector3 startPos, Vector3 endPos, int numPoints, float k, float dt, float kDamping, Vector3 gravity);
