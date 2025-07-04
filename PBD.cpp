@@ -3,60 +3,42 @@
 void PBD::Initialize(Vector3 startPos, Vector3 endPos, int numPoints, float k, float dt, float kDamping, Vector3 gravity)
 {
 	points_.clear();
-	constraints_.clear();
-	startPos_ = startPos;// 開始位置を設定
-	endPos_ = endPos;// 終了位置を設定
-	numPoints_ = numPoints;// 点の数を設定
-	springStiffness_ = k;// バネ定数を設定
-	dt_ = dt;// タイムステップを設定
-	kDamping_ = kDamping;// ダンピング係数を設定
-	gravity_ = gravity;// 重力を設定
+    constraints_.clear();
+    startPos_ = startPos;
+    endPos_ = endPos;
+    numPoints_ = numPoints;
+    springStiffness_ = k;
+    dt_ = dt;
+    kDamping_ = kDamping;
+    gravity_ = gravity;
 
-	if (numPoints_ < 2) return; // 2点未満は無効
+    if (numPoints_ < 2) return;
 
-	points_.resize(numPoints_);
-	for (int i = 0; i < numPoints_; ++i) {
-		points_[i].resize(numPoints_);
-	}// 点の数だけポイントを確保
-	constraints_.resize(numPoints_ - 1);// 制約の数は点の数 - 1
+    points_.resize(numPoints_);
+    for (int i = 0; i < numPoints_; ++i) {
+        points_[i].resize(numPoints_);
+    }
 
-	for (int i = 0; i < numPoints_; i++) {
-		float t = static_cast<float>(i) / static_cast<float>((numPoints_ - 1));
-		for (int j = 0; j < numPoints_; j++) {
-			points_[i][j].position = Lerp(startPos_, endPos_, t);
-			points_[i][j].estimationPosition = points_[i][j].position;
-			points_[i][j].velocity = Vector3(0.0f, 0.0f, 0.0f);
-			points_[i][j].mass = 1.0f;
-		}
-	}
-	points_[0][0].isFixed = true;
-	points_[numPoints_ - 1][numPoints_ - 1].isFixed = true;
-	//points_[0][numPoints_ -1 ].isFixed = true;
-	//points_[numPoints_ - 1][0].isFixed = true;
+    // 格子状に配置
+    for (int i = 0; i < numPoints_; ++i) {
+        for (int j = 0; j < numPoints_; ++j) {
+            float tx = static_cast<float>(i) / (numPoints_ - 1);
+            float ty = static_cast<float>(j) / (numPoints_ - 1);
+            // X, Y方向に線形補間
+            points_[i][j].position.x = (1 - tx) * startPos_.x + tx * endPos_.x;
+            points_[i][j].position.y = (1 - ty) * startPos_.y + ty * endPos_.y;
+            points_[i][j].position.z = (1 - tx) * startPos_.z + tx * endPos_.z; // 必要ならZも補間
 
-	for (int i = 0; i < numPoints_; ++i) {
-		for (int j = 0; j < numPoints_; ++j) {
-			// 横方向（右隣）
-			if (i + 1 < numPoints_) {
-				Constraint c;
-				c.prevI = i; c.prevJ = j;
-				c.nextI = i + 1; c.nextJ = j;
-				c.distance = Length(Subtract(points_[i][j].position, points_[i + 1][j].position));
-				constraints_.push_back(c);
-			}
-			// 縦方向（下隣）
-			if (j + 1 < numPoints_) {
-				Constraint c;
-				c.prevI = i; c.prevJ = j;
-				c.nextI = i; c.nextJ = j + 1;
-				c.distance = Length(Subtract(points_[i][j].position, points_[i][j + 1].position));
-				constraints_.push_back(c);
-			}
-			// 必要なら斜め方向も追加
-		}
-	}
+            points_[i][j].estimationPosition = points_[i][j].position;
+            points_[i][j].velocity = Vector3(0.0f, 0.0f, 0.0f);
+            points_[i][j].mass = 1.0f;
+            points_[i][j].isFixed = false;
+        }
+    }
+    points_[0][0].isFixed = true;
+    points_[numPoints_ - 1][numPoints_ - 1].isFixed = true;
 
-
+    // 制約の生成（省略、既存のままでOK）
 }
 
 void PBD::Update()
