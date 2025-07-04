@@ -38,7 +38,10 @@ void PBD::Initialize(Vector3 startPos, Vector3 endPos, int numPoints, float k, f
     }
     points_[0][0].isFixed = true;
     points_[numPoints_ - 1][numPoints_ - 1].isFixed = true;
+    points_[0][numPoints_ - 1].isFixed = true;
+    //points_[numPoints_ - 1][0].isFixed = true;
 
+  
     // 横方向の曲げ制約
     for (int i = 0; i < numPoints_ - 2; ++i) {
         for (int j = 0; j < numPoints_; ++j) {
@@ -82,37 +85,29 @@ void PBD::Update()
 		for (int j = 0; j < numPoints_; j++)
 		{
 			if (points_[i][j].isFixed) {
+				points_[i][j].velocity = {0.0f, 0.0f, 0.0f};
 				continue;
 			} // 固定点はスキップ
 			points_[i][j].velocity += Multiply(dt_, gravity_);
-			if (points_[i][j].isFixed)
-			{
-				points_[i][j].velocity = Vector3(0.0f, 0.0f, 0.0f);
-			}
 		}
-
-
 	}
-
-
-
 
 	// 位置の更新
 	std::vector<std::vector<Vector3>> oldPosition(numPoints_, std::vector<Vector3>(numPoints_));
 	for (int i = 0; i < numPoints_; ++i) {
 		for (int j = 0; j < numPoints_; ++j) {
+            if (points_[i][j].isFixed) {
+                continue; // 固定点はスキップ
+			}
 			oldPosition[i][j] = points_[i][j].position;
 			points_[i][j].estimationPosition = Add(points_[i][j].position, Multiply(dt_, points_[i][j].velocity));
 			points_[i][j].position = points_[i][j].estimationPosition;
 		}
 	}
 
-
-
 	//速度の更新
 	for (const Constraint& c : constraints_)
 	{
-
 		Points p1 = points_[c.prevI][c.prevI];
 		Points p2 = points_[c.nextI][c.nextJ];
 		if (p1.isFixed && p2.isFixed) {
@@ -127,9 +122,7 @@ void PBD::Update()
 
 		points_[c.prevI][c.prevJ].velocity += Division(dt_, dp1);
 		points_[c.nextI][c.nextJ].velocity += Division(dt_, dp2);
-
 	}
-
 
 	// Solver iterations for constraints
 	for (int iter = 0; iter < solverIterations_; ++iter) {
@@ -184,8 +177,7 @@ void PBD::Update()
 	for (int i = 0; i < numPoints_; i++) {
 		for (int j = 0; j < numPoints_; j++)
 		{
-		points_[i][j].position = points_[i][j].estimationPosition;
-
+			points_[i][j].position = points_[i][j].estimationPosition;
 		}
 	}
 
@@ -198,16 +190,18 @@ void PBD::Update()
 			} // 固定点はスキップ
 			points_[i][j].velocity = Division(dt_, Subtract(points_[i][j].position, oldPosition[i][j]));
 		}
-		/*if (!points_[i].isFixed) {
-			points_[i].velocity = Division(dt_, Subtract(points_[i].position, oldPosition[i]));
-		}*/
 	}
-	points_[0][0].position = startPos_;
-	//points_[0].isFixed = true;
-	// 最後の点をendPosに固定
-	points_[numPoints_ - 1][numPoints_ - 1].position = endPos_;
-	//	points_[numPoints_ - 1].isFixed = true;
+	
 	VelocityDamping();
+      // 始点
+    points_[0][0].position = startPos_;
+    points_[0][0].estimationPosition = startPos_;
+    points_[0][0].velocity = {0.0f, 0.0f, 0.0f};
+    // 終点
+    points_[numPoints_ - 1][numPoints_ - 1].position = endPos_;
+    points_[numPoints_ - 1][numPoints_ - 1].estimationPosition = endPos_;
+    points_[numPoints_ - 1][numPoints_ - 1].velocity = {0.0f, 0.0f, 0.0f};
+
 }
 
 void PBD::Draw(
@@ -292,9 +286,6 @@ void PBD::VelocityDamping()
             points_[i][j].velocity += Multiply(kDamping_, deltaV);
         }
     }
-
-
-
 }
 
 

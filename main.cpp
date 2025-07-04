@@ -25,7 +25,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 endPosition = { 1.0f, 1.0f,0.0f };
 
 	PBD* pbd = new PBD;
-	int pointCount = 3;// 点の数
+	int pointCount = 4;// 点の数
 	float k = 0.1f; // バネの定数
 	const float dt = 1.f / 60.f; // デルタタイム
 	Vector3 gravity = { 0.0f, -9.8f ,0.0f}; // 重力ベクトル
