@@ -31,6 +31,8 @@ void PBD::Initialize(Vector3 startPos, Vector3 endPos, int numPoints, float k, f
 	}
 	points_[0][0].isFixed = true;
 	points_[numPoints_ - 1][numPoints_ - 1].isFixed = true;
+	//points_[0][numPoints_ -1 ].isFixed = true;
+	//points_[numPoints_ - 1][0].isFixed = true;
 
 	for (int i = 0; i < numPoints_; ++i) {
 		for (int j = 0; j < numPoints_; ++j) {
@@ -185,31 +187,40 @@ void PBD::Draw(
 	Matrix4x4 viewPortMatrix // ビューポート行列
 )
 {
+    // 各点を描画
+    for (int i = 0; i < numPoints_; ++i) {
+        for (int j = 0; j < numPoints_; ++j) {
+            Vector3 screen = Transform(Transform(points_[i][j].position, viewProjectionMatrix), viewPortMatrix);
+            int color = points_[i][j].isFixed ? RED : WHITE;
+            Novice::DrawEllipse(static_cast<int>(screen.x), static_cast<int>(screen.y), 5, 5, 0.0f, color, kFillModeSolid);
+       			 Novice::ScreenPrintf(10, 10 + (i * numPoints_ + j) * 20, "Point (%d,%d): (%.02f, %.02f)", i, j, points_[i][j].position.x, points_[i][j].position.y);
 
-	for (int i = 0; i < numPoints_; ++i) {
-		for (int j = 0; j < numPoints_; ++j) {
-			Vector3 screen = Transform(Transform(points_[i][j].position, viewProjectionMatrix), viewPortMatrix);
-			Novice::DrawEllipse(static_cast<int>(screen.x), static_cast<int>(screen.y), 5, 5, 0.0f, WHITE, kFillModeSolid);
-			// デバッグ用表示
-			// Novice::ScreenPrintf(10, 10 + (i * numPoints_ + j) * 20, "Point (%d,%d): (%.02f, %.02f)", i, j, points_[i][j].position.x, points_[i][j].position.y);
 		}
-	}
+    }
 
-	for (const Constraint& c : constraints_) {
-    const Points& p1 = points_[c.prevI][c.prevJ];
-    const Points& p2 = points_[c.nextI][c.nextJ];
-    Vector3 p1Screen = Transform(Transform(p1.position, viewProjectionMatrix), viewPortMatrix);
-    Vector3 p2Screen = Transform(Transform(p2.position, viewProjectionMatrix), viewPortMatrix);
-    Novice::DrawLine(static_cast<int>(p1Screen.x), static_cast<int>(p1Screen.y),
-                     static_cast<int>(p2Screen.x), static_cast<int>(p2Screen.y), WHITE);
-	}
+    // 横方向の線（右隣と結ぶ）
+    for (int i = 0; i < numPoints_ - 1; ++i) {
+        for (int j = 0; j < numPoints_; ++j) {
+            Vector3 p1 = Transform(Transform(points_[i][j].position, viewProjectionMatrix), viewPortMatrix);
+            Vector3 p2 = Transform(Transform(points_[i + 1][j].position, viewProjectionMatrix), viewPortMatrix);
+            Novice::DrawLine(static_cast<int>(p1.x), static_cast<int>(p1.y), static_cast<int>(p2.x), static_cast<int>(p2.y), WHITE);
+        }
+    }
 
-	// 開始位置と終了位置の描画
-	Vector3 startScreen = Transform(Transform(startPos_, viewProjectionMatrix), viewPortMatrix);
-	Vector3 endScreen = Transform(Transform(endPos_, viewProjectionMatrix), viewPortMatrix);
-	Novice::DrawEllipse(static_cast<int>(startScreen.x), static_cast<int>(startScreen.y), 5, 5, 0.0f, RED, kFillModeSolid);
-	Novice::DrawEllipse(static_cast<int>(endScreen.x), static_cast<int>(endScreen.y), 5, 5, 0.0f, BLACK, kFillModeSolid);
+    // 縦方向の線（下隣と結ぶ）
+    for (int i = 0; i < numPoints_; ++i) {
+        for (int j = 0; j < numPoints_ - 1; ++j) {
+            Vector3 p1 = Transform(Transform(points_[i][j].position, viewProjectionMatrix), viewPortMatrix);
+            Vector3 p2 = Transform(Transform(points_[i][j + 1].position, viewProjectionMatrix), viewPortMatrix);
+            Novice::DrawLine(static_cast<int>(p1.x), static_cast<int>(p1.y), static_cast<int>(p2.x), static_cast<int>(p2.y), WHITE);
+        }
+    }
 
+    // 開始位置と終了位置の描画
+    Vector3 startScreen = Transform(Transform(startPos_, viewProjectionMatrix), viewPortMatrix);
+    Vector3 endScreen = Transform(Transform(endPos_, viewProjectionMatrix), viewPortMatrix);
+    Novice::DrawEllipse(static_cast<int>(startScreen.x), static_cast<int>(startScreen.y), 5, 5, 0.0f, RED, kFillModeSolid);
+    Novice::DrawEllipse(static_cast<int>(endScreen.x), static_cast<int>(endScreen.y), 5, 5, 0.0f, BLACK, kFillModeSolid);
 }
 
 void PBD::VelocityDamping()

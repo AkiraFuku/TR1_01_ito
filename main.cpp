@@ -25,7 +25,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 endPosition = { 50.0f, 50.0f,0.0f };
 
 	PBD* pbd = new PBD;
-	int pointCount = 10;// 点の数
+	int pointCount = 2;// 点の数
 	float k = 0.1f; // バネの定数
 	const float dt = 1.f / 60.f; // デルタタイム
 	Vector3 gravity = { 0.0f, -9.8f ,0.0f}; // 重力ベクトル
@@ -56,7 +56,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		// マウスの位置を取得
-
+			if (keys[DIK_W] != 0) cameraTranslate.z += 1.0f/60.0f; // 前進
+		if (keys[DIK_S] != 0) cameraTranslate.z -= 1.0f/60.0f; // 後退	
+		if (keys[DIK_A] != 0) cameraTranslate.x -= 1.0f/60.0f; // 左移動
+		if (keys[DIK_D] != 0) cameraTranslate.x += 1.0f/60.0f; // 右移動
+		if (keys[DIK_UP] != 0) cameraTranslate.y += 1.0f/60.0f; // 前進
+		if (keys[DIK_DOWN] != 0) cameraTranslate.y-= 1.0f/60.0f; // 後退	
+		if (keys[DIK_LEFT] != 0) cameraRotate.x -= 1.0f/60.0f; // 左移動
+		if (keys[DIK_RIGHT] != 0) cameraRotate.x += 1.0f/60.0f; // 右移動
 
 		// 修正: static_cast を削除し、適切な型変換を行うために一時変数を使用します。
 		int mouseX = static_cast<int>(mousePosition.x);
@@ -71,6 +78,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::SliderFloat3("startPos", &startPosition.x, 0.01f, 1280.0f, "%.3f");
 		ImGui::SliderFloat3("EndPos", &endPosition.x, 0.01f, 1280.0f, "%.3f");
 		ImGui::SliderFloat3("Camera Pos", &cameraTranslate.x, -1280.0f, 1280.0f, "%.2f");
+		ImGui::SliderFloat3("Camera Rotate", &cameraRotate.x, -1280.0f, 1280.0f, "%.2f");
+
 
 		ImGui::End();
 		pbd->setK(k);
