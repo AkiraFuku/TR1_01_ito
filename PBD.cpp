@@ -126,6 +126,8 @@ void PBD::Update()
 
 	// Solver iterations for constraints
 	for (int iter = 0; iter < solverIterations_; ++iter) {
+		// Distance constraints
+		// 距離制約の解決
 		for (const Constraint& c : constraints_) {
 			PBD::Points& p1 = points_[c.prevI][c.prevJ];
 			PBD::Points& p2 = points_[c.nextI][c.nextJ];
@@ -158,6 +160,7 @@ void PBD::Update()
 		}
 
 		// Bend constraints
+		// 曲げ制約の解決
 		for (const BendConstraint& bc : bendConstraints_) {
 			Points& p1 = points_[bc.i1][bc.j1];
 			Points& p2 = points_[bc.i2][bc.j2];
@@ -193,6 +196,17 @@ void PBD::Update()
 	}
 	
 	VelocityDamping();
+    for (int i = 0; i < numPoints_; i++)
+    {
+        for (int j = 0; j < numPoints_; j++)
+        {
+            if (points_[i][j].isFixed) {
+                points_[i][j].velocity = {0.0f, 0.0f, 0.0f}; // 固定点の速度はゼロ
+            }
+		}
+
+    }
+
       // 始点
     points_[0][0].position = startPos_;
     points_[0][0].estimationPosition = startPos_;
